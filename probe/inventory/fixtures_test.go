@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"homelab-copilot/probe/inventory"
+	"lightpath/probe/inventory"
 )
 
 func sampleResults() []inventory.Result {

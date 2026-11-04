@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"homelab-copilot/probe/inventory"
+	"lightpath/probe/inventory"
 )
 
 // fakeRunner returns canned outcomes keyed by argv[0] and records calls.

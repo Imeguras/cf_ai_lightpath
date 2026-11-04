@@ -4,11 +4,18 @@ package inventory
 //
 // Every entry passes Validate and none escalates privileges; commands that
 // need root are expected to fail and that failure is the evidence. The list
-// covers the OS and kernel, packages, ZFS, systemd units and the journal,
-// disks, network and the ConnectX-3 Pro, sensors and IPMI, libvirt,
-// Kubernetes, Docker and PCP. It includes at least the IDs used by the ZFS
-// validation case: uname, pacman-q, pacman-kernel-zfs, zfs-dkms-meta,
-// dkms-status, modinfo-zfs, zpool-status and virsh-system-pools.
+// covers the OS and kernel, packages (repo packages through pacman, AUR
+// packages through paru), ZFS, systemd units and the journal, disks, network
+// and the ConnectX-3 Pro, sensors and IPMI, libvirt, Kubernetes, Docker and
+// PCP. It includes at least the IDs used by the ZFS validation case: uname,
+// pacman-q, pacman-kernel-zfs, pacman-foreign, paru-aur-info-zfs,
+// zfs-dkms-meta, dkms-status, modinfo-zfs, zpool-status and
+// virsh-system-pools.
+//
+// pacman and paru are only used to query: their first argument is --version,
+// a query (-Q...), a show (-P...) or an info lookup (-S... with i, never with
+// y, u or w), so nothing is synced, downloaded, built or installed. The paru
+// AUR lookups do contact the AUR over the network.
 //
 // Each call returns a fresh slice, so callers may modify it.
 func DefaultCommands() []Command {
@@ -29,6 +36,14 @@ func DefaultCommands() []Command {
 			"linux", "linux-headers", "linux-lts", "linux-lts-headers", "zfs-dkms", "zfs-utils"),
 		c("pacman-qi-zfs-dkms", "zfs-dkms package details and dependencies", "pacman", "-Qi", "zfs-dkms"),
 		c("pacman-qi-zfs-utils", "zfs-utils package details and dependencies", "pacman", "-Qi", "zfs-utils"),
+		c("pacman-foreign", "packages not from the official repos (AUR or manual installs)", "pacman", "-Qm"),
+
+		// AUR (paru; the lookups below query the AUR over the network)
+		c("paru-version", "paru and libalpm versions", "paru", "--version"),
+		c("paru-aur-upgrades", "AUR packages with a newer version on the AUR", "paru", "-Qua"),
+		c("paru-aur-info-zfs", "latest AUR zfs-dkms/zfs-utils: is there one that supports the running kernel?",
+			"paru", "-Sai", "zfs-dkms", "zfs-utils"),
+		c("paru-stats", "package counts, including foreign packages", "paru", "-Ps"),
 
 		// ZFS
 		c("zfs-dkms-meta", "kernel range the installed ZFS source supports (Linux-Minimum/Maximum)",
@@ -67,8 +82,10 @@ func DefaultCommands() []Command {
 		c("ethtool-ens9d1-module", "transceiver/optic readings (may need root)", "ethtool", "-m", "ens9d1"),
 		c("lspci-mellanox", "Mellanox devices and PCI IDs", "lspci", "-nn", "-d", "15b3:"),
 		c("lspci-mellanox-verbose", "Mellanox PCIe link width and speed (partial without root)", "lspci", "-vv", "-d", "15b3:"),
+		// Searches /sys/devices without following symlinks: the /sys/class
+		// view loops back on itself through device/, which makes find -L fail.
 		c("ib-sysfs", "InfiniBand port state, physical state, rate and link layer from sysfs",
-			"find", "-L", "/sys/class/infiniband", "-maxdepth", "4",
+			"find", "/sys/devices", "-path", "*/infiniband/*/ports/*",
 			"(", "-name", "state", "-o", "-name", "phys_state", "-o", "-name", "rate", "-o", "-name", "link_layer", ")",
 			"-exec", "grep", "-H", ".", "{}", "+"),
 		c("ibstat", "InfiniBand HCA and port summary (infiniband-diags)", "ibstat"),
@@ -81,11 +98,13 @@ func DefaultCommands() []Command {
 		c("virsh-system-list", "system VMs and their state", "virsh", "-r", "-c", "qemu:///system", "list", "--all"),
 		c("virsh-system-pools", "storage pools (ZFS-backed ones fail to start)", "virsh", "-r", "-c", "qemu:///system", "pool-list", "--all", "--details"),
 		c("virsh-system-nets", "libvirt networks", "virsh", "-r", "-c", "qemu:///system", "net-list", "--all"),
-		c("virsh-session-list", "session VMs", "virsh", "-r", "-c", "qemu:///session", "list", "--all"),
+		c("virsh-session-list", "session VMs (usually empty; empty is normal, not a fault)", "virsh", "-r", "-c", "qemu:///session", "list", "--all"),
 
 		// Kubernetes, Docker, PCP
 		c("kubectl-version", "kubectl client version", "kubectl", "version", "--client", "-o", "json"),
 		c("docker-ps", "containers and their state", "docker", "ps", "-a", "--no-trunc", "--format", "json"),
+		c("docker-security", "daemon security options: shows \"name=rootless\" when Docker runs rootless",
+			"docker", "info", "--format", "{{json .SecurityOptions}}"),
 		c("pminfo", "metric names PCP provides (PMDAs present)", "pminfo"),
 	}
 }

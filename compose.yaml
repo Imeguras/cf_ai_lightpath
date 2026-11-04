@@ -1,26 +1,26 @@
-# Early local stack. Only the cockpit exists so far; the Worker runs with
+# Early local stack. Only the Lightpath web app exists so far; the Worker runs with
 # `wrangler dev` (phase 4) and the probe runs on the host, not in a container
 # (phase 7), because it reads host devices and the journal.
 #
 #   cp .env.example .env    # then fill in SECRET_KEY_BASE
 #   docker compose up --build
-#   open http://127.0.0.1:4100   (COCKPIT_PORT in .env changes it)
+#   open http://127.0.0.1:4100   (LIGHTPATH_PORT in .env changes it)
 
-name: homelab-copilot
+name: lightpath
 
 services:
-  cockpit:
+  lightpath:
     build:
-      context: ./cockpit
-    image: homelab-copilot/cockpit:dev
+      context: ./lightpath
+    image: lightpath:dev
     environment:
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:?set SECRET_KEY_BASE in .env (mix phx.gen.secret)}
       PHX_HOST: ${PHX_HOST:-localhost}
       # One variable sets both the app's listen port and the host mapping.
-      PORT: ${COCKPIT_PORT:-4100}
+      PORT: ${LIGHTPATH_PORT:-4100}
     ports:
       # Loopback only; nothing is exposed to the LAN until we decide to.
-      - "127.0.0.1:${COCKPIT_PORT:-4100}:${COCKPIT_PORT:-4100}"
+      - "127.0.0.1:${LIGHTPATH_PORT:-4100}:${LIGHTPATH_PORT:-4100}"
     # Hardening: the release needs no writes outside /tmp and no capabilities.
     # cap_drop ALL is the strict option: if something fails with "operation not
     # permitted", suspect this first and add back only the capability it needs.

@@ -1,0 +1,32 @@
+# Single-node kubeadm cluster for the homelab. Not built for high availability.
+#   doas kubeadm init --config deploy/k8s/kubeadm-config.yaml
+#
+# No IP address or Kubernetes version is pinned here on purpose:
+# - kubeadm detects the node's address at init (keep it stable with a DHCP
+#   reservation, see README.md);
+# - kubernetesVersion defaults to the installed kubeadm, so pacman is the one
+#   place that decides the version.
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: InitConfiguration
+# Cilium replaces kube-proxy (kubeProxyReplacement in cilium-values.yaml).
+skipPhases:
+  - addon/kube-proxy
+nodeRegistration:
+  criSocket: unix:///run/containerd/containerd.sock
+  # Single node: no control-plane taint, so workloads can run here.
+  taints: []
+---
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+clusterName: lightpath
+networking:
+  serviceSubnet: 10.96.0.0/12
+  # No podSubnet: Cilium's own IPAM hands out pod IPs (cilium-values.yaml).
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+# The server keeps its 64 GiB swap. The kubelet tolerates it, and pods never swap.
+failSwapOn: false
+memorySwap:
+  swapBehavior: NoSwap

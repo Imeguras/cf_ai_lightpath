@@ -16,7 +16,7 @@ import (
 	"strings"
 	"time"
 
-	"homelab-copilot/probe/inventory"
+	"lightpath/probe/inventory"
 )
 
 func main() {
@@ -66,7 +66,10 @@ func run() error {
 			label = "local"
 		}
 	case *target != "":
-		runner = inventory.SSHRunner{Target: *target}
+		// LogLevel=ERROR hides the server's login banner, which ssh writes to
+		// stderr and would otherwise prepend to every fixture's stderr.
+		// Errors such as a changed host key are still shown.
+		runner = inventory.SSHRunner{Target: *target, Options: []string{"-o", "LogLevel=ERROR"}}
 	default:
 		return fmt.Errorf("-target or -local is required (or -list)")
 	}

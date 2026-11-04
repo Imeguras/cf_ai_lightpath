@@ -1,11 +1,11 @@
 ---
 name: homeserver-docker-rootless
-description: Unknown whether the homelab server's Docker daemon is rootless; keep compose and Helm choices compatible with both
+description: The homelab server's Docker daemon is rootful (checked 2026-11-04); still keep compose/Helm choices rootless-compatible
 metadata:
   type: project
 ---
 
-As of 2026-11-04, João isn't sure whether Docker on the homelab server runs rootless.
+João wasn't sure whether Docker on the homelab server runs rootless. The phase 1 inventory settled it on 2026-11-04: `docker info` security options are `seccomp` and `cgroupns`, with no `rootless`, so the daemon is **rootful** (micron reaches it through the docker group).
 
-**Why:** rootless Docker changes what works: no host ports below 1024, port publishing goes through rootlesskit, cgroup limits may be unavailable, and bind-mounted file ownership maps to subuids.
-**How to apply:** keep container ports ≥1024, avoid privileged mode and host device mounts in compose, and check the daemon mode (`docker info` shows "rootless" under Security Options) before anything that depends on it on the server. Related: [[cap-drop-reminder]].
+**Why:** rootful means the docker group is effectively root on that box, and Docker's iptables rules (FORWARD DROP) sit next to the kubeadm/Cilium cluster.
+**How to apply:** keep container ports ≥1024 and avoid privileged mode anyway, so a later switch to rootless costs nothing. Re-check with the `docker-security` inventory command if he changes the setup. Related: [[cap-drop-reminder]].

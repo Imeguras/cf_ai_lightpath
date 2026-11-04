@@ -10,6 +10,8 @@ metadata:
 
 This directory is for the optional fast-track assignment on Cloudflare's Systems Reliability Engineer – Core application (Lisbon/London, greenhouse job 8324908). It requires an AI app on Cloudflare with an LLM (Llama 3.3 on Workers AI recommended), workflow/coordination, chat or voice input, memory/state, and a submitted prompt history. The plan is to stay on the free Workers plan (10k Neurons/day, where going over errors and doesn't bill).
 
+Project name: **Lightpath**, repo `cf_ai_lightpath` (after IBM Light Path Diagnostics). Phoenix app `lightpath/` (modules `Lightpath`, `LightpathWeb`), Go module `lightpath/probe`, compose project and service `lightpath`, port variable `LIGHTPATH_PORT`.
+
 The conversation history goes in `PROMPTS.md` at the repo root (one section per session). `ai-history/memories/` holds redacted copies of the loaded instructions and memories. Both are published with the repo. Created 2026-11-02.
 
 **Why:** the repo and its prompt history will be public on GitHub and read by Cloudflare recruiters.

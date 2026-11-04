@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"homelab-copilot/probe/inventory"
+	"lightpath/probe/inventory"
 )
 
 var awkwardStrings = []string{

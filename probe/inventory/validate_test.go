@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"homelab-copilot/probe/inventory"
+	"lightpath/probe/inventory"
 )
 
 func cmd(id string, argv ...string) inventory.Command {
@@ -137,7 +137,7 @@ func TestDefaultCommandsIncludeZFSCaseIDs(t *testing.T) {
 	for _, c := range inventory.DefaultCommands() {
 		have[c.ID] = true
 	}
-	for _, id := range []string{"uname", "pacman-q", "pacman-kernel-zfs", "zfs-dkms-meta", "dkms-status", "modinfo-zfs", "zpool-status", "virsh-system-pools"} {
+	for _, id := range []string{"uname", "pacman-q", "pacman-kernel-zfs", "pacman-foreign", "paru-aur-info-zfs", "zfs-dkms-meta", "dkms-status", "modinfo-zfs", "zpool-status", "virsh-system-pools"} {
 		if !have[id] {
 			t.Errorf("DefaultCommands() lacks ID %q", id)
 		}
@@ -161,6 +161,7 @@ func TestDefaultCommandsCoverAreas(t *testing.T) {
 	for area, want := range map[string][]string{
 		"kernel":     {"uname"},
 		"packages":   {"pacman"},
+		"aur":        {"paru"},
 		"zfs":        {"zpool", "zfs"},
 		"systemd":    {"systemctl", "journalctl"},
 		"disks":      {"lsblk"},
@@ -202,6 +203,52 @@ func TestDefaultCommandIDsMatchDocumentedPattern(t *testing.T) {
 	for _, c := range inventory.DefaultCommands() {
 		if !idPattern.MatchString(c.ID) {
 			t.Errorf("ID %q does not match %s", c.ID, idPattern)
+		}
+	}
+}
+
+// queryOnly is the doc's rule for pacman/paru operations.
+func queryOnly(op string) bool {
+	if op == "--version" {
+		return true
+	}
+	if strings.HasPrefix(op, "--") || len(op) < 2 {
+		return false
+	}
+	switch op[:2] {
+	case "-Q", "-P":
+		return true
+	case "-S":
+		return strings.Contains(op[2:], "i") && !strings.ContainsAny(op[2:], "yuw")
+	}
+	return false
+}
+
+// The doc promises pacman and paru only query: --version, -Q..., -P..., or an
+// -S... info lookup that never syncs, upgrades or downloads.
+func TestDefaultCommandsPackageManagersOnlyQuery(t *testing.T) {
+	for _, c := range inventory.DefaultCommands() {
+		if c.Argv[0] != "pacman" && c.Argv[0] != "paru" {
+			continue
+		}
+		if len(c.Argv) < 2 {
+			t.Errorf("%s: %q has no operation", c.ID, c.Argv)
+			continue
+		}
+		op := c.Argv[1]
+		ok := queryOnly(op)
+		if !ok {
+			t.Errorf("%s: %q is not a query-only operation", c.ID, c.Argv)
+		}
+	}
+}
+
+func TestQueryOnlyRuleRejectsWriteOperations(t *testing.T) {
+	// Guards the test above: these must not be accepted by the same rule.
+	for _, op := range []string{"-S", "-Syu", "-Sy", "-Sw", "-Siy", "-U", "-R", "-Rns", "-G", "--sync"} {
+		ok := queryOnly(op)
+		if ok {
+			t.Errorf("rule accepts write operation %q", op)
 		}
 	}
 }
