@@ -1,0 +1,13 @@
+{
+  "id": "uptime",
+  "argv": [
+    "uptime"
+  ],
+  "started_at": "2026-11-04T17:32:40.778448338Z",
+  "duration_ms": 156,
+  "exit_code": 0,
+  "stdout": " 17:28:58 up 4 min,  2 users,  load average: 0.38, 0.45, 0.22\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

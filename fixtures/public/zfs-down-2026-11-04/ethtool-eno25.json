@@ -1,0 +1,14 @@
+{
+  "id": "ethtool-eno25",
+  "argv": [
+    "ethtool",
+    "eno25"
+  ],
+  "started_at": "2026-11-04T17:32:51.230608729Z",
+  "duration_ms": 155,
+  "exit_code": 0,
+  "stdout": "Settings for eno25:\n\tSupported ports: [ TP ]\n\tSupported link modes:   10baseT/Half 10baseT/Full\n\t                        100baseT/Half 100baseT/Full\n\t                        1000baseT/Full\n\tSupported pause frame use: Symmetric\n\tSupports auto-negotiation: Yes\n\tSupported FEC modes: Not reported\n\tAdvertised link modes:  10baseT/Half 10baseT/Full\n\t                        100baseT/Half 100baseT/Full\n\t                        1000baseT/Full\n\tAdvertised pause frame use: Symmetric\n\tAdvertised auto-negotiation: Yes\n\tAdvertised FEC modes: Not reported\n\tSpeed: 100Mb/s\n\tDuplex: Full\n\tAuto-negotiation: on\n\tPort: Twisted Pair\n\tPHYAD: 1\n\tTransceiver: internal\n\tMDI-X: off (auto)\n        Current message level: 0x00000007 (7)\n                               drv probe link\n\tLink detected: yes\n",
+  "stderr": "netlink error: Operation not permitted\n",
+  "truncated": false,
+  "timed_out": false
+}

@@ -1,0 +1,13 @@
+{
+  "id": "ibstat",
+  "argv": [
+    "ibstat"
+  ],
+  "started_at": "2026-11-04T17:32:52.740315134Z",
+  "duration_ms": 202,
+  "exit_code": 0,
+  "stdout": "CA 'ibp17s0'\n\tCA type: MT4103\n\tNumber of ports: 2\n\tFirmware version: 2.42.5000\n\tHardware version: 0\n\tNode GUID: 0x0200000000000011\n\tSystem image GUID: 0x0200000000000012\n\tPort 1:\n\t\tState: Down\n\t\tPhysical state: Polling\n\t\tRate: 10\n\t\tBase lid: 0\n\t\tLMC: 0\n\t\tSM lid: 0\n\t\tCapability mask: 0x02514868\n\t\tPort GUID: 0x0200000000000013\n\t\tLink layer: InfiniBand\n\tPort 2:\n\t\tState: Down\n\t\tPhysical state: Disabled\n\t\tRate: 40\n\t\tBase lid: 0\n\t\tLMC: 0\n\t\tSM lid: 0\n\t\tCapability mask: 0x00010000\n\t\tPort GUID: 0x0200000000000014\n\t\tLink layer: Ethernet\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

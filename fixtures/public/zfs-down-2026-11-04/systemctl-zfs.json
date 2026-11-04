@@ -1,0 +1,19 @@
+{
+  "id": "systemctl-zfs",
+  "argv": [
+    "systemctl",
+    "status",
+    "--no-pager",
+    "zfs-import-cache.service",
+    "zfs-import-scan.service",
+    "zfs-mount.service",
+    "zfs.target"
+  ],
+  "started_at": "2026-11-04T17:32:47.893932489Z",
+  "duration_ms": 345,
+  "exit_code": 3,
+  "stdout": "* zfs-import-cache.service - Import ZFS pools by cache file\n     Loaded: loaded (/usr/lib/systemd/system/zfs-import-cache.service; enabled; preset: enabled)\n     Active: inactive (dead)\n  Condition: start condition unmet at Wed 2026-11-04 17:24:31 UTC; 4min 34s ago\n             `- ConditionPathIsDirectory=/sys/module/zfs was not met\n       Docs: man:zpool(8)\n\nNov 04 17:24:31 labhost systemd[1]: Import ZFS pools by cache file skipped, unmet condition check ConditionPathIsDirectory=/sys/module/zfs\n\n* zfs-import-scan.service - Import ZFS pools by device scanning\n     Loaded: loaded (/usr/lib/systemd/system/zfs-import-scan.service; enabled; preset: disabled)\n     Active: inactive (dead)\n  Condition: start condition unmet at Wed 2026-11-04 17:24:31 UTC; 4min 34s ago\n             `- ConditionPathIsDirectory=/sys/module/zfs was not met\n       Docs: man:zpool(8)\n\nNov 04 17:24:31 labhost systemd[1]: Import ZFS pools by device scanning skipped, unmet condition check ConditionPathIsDirectory=/sys/module/zfs\n\n* zfs-mount.service - Mount ZFS filesystems\n     Loaded: loaded (/usr/lib/systemd/system/zfs-mount.service; enabled; preset: enabled)\n     Active: inactive (dead)\n  Condition: start condition unmet at Wed 2026-11-04 17:24:31 UTC; 4min 34s ago\n             `- ConditionPathIsDirectory=/sys/module/zfs was not met\n       Docs: man:zfs(8)\n\nNov 04 17:24:31 labhost systemd[1]: Mount ZFS filesystems skipped, unmet condition check ConditionPathIsDirectory=/sys/module/zfs\n\n* zfs.target - ZFS startup target\n     Loaded: loaded (/usr/lib/systemd/system/zfs.target; enabled; preset: enabled)\n     Active: active since Wed 2026-11-04 17:24:32 UTC; 4min 33s ago\n Invocation: 9fd8f9340c164153bc094425d276320c\n\nNov 04 17:24:32 labhost systemd[1]: Reached target ZFS startup target.\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

@@ -17,7 +17,7 @@ defmodule LightpathWeb.Router do
   scope "/", LightpathWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", EvidenceLive
   end
 
   # Other scopes may use custom stacks.

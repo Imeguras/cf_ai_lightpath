@@ -1,0 +1,14 @@
+{
+  "id": "paru-stats",
+  "argv": [
+    "paru",
+    "-Ps"
+  ],
+  "started_at": "2026-11-04T17:32:45.737469854Z",
+  "duration_ms": 894,
+  "exit_code": 0,
+  "stdout": "paru v2.2.0 - libalpm v16.0.1\n===========================================\nTotal installed packages: 801\nAur packages: 29\nRepo packages: 770\nExplicitly installed packages: 114\nTotal Size occupied by packages: 7.13 GiB\n===========================================\nTen biggest packages:\nnextcloud: 760.53 MiB\nlinux-headers: 321.41 MiB\nrust: 309.14 MiB\nfirefox: 302.18 MiB\ngcc: 220.89 MiB\nllvm-libs: 164.88 MiB\nlinux: 161.64 MiB\nboost: 151.16 MiB\nlinux-firmware-intel: 142.24 MiB\nclang-libs: 132.37 MiB\n===========================================\n:: packages not in the AUR: paru-debug  python-pkg_resources\n:: marked out of date: cockpit-file-sharing  epub-thumbnailer-git\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

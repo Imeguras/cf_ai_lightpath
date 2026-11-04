@@ -1,0 +1,84 @@
+// Themes, page shell and header.
+@use "tokens" as *;
+
+// Light by default; dark follows the OS unless the theme toggle picked light,
+// and the toggle's explicit dark wins either way.
+:root {
+  @include theme(light);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    @include theme(dark);
+  }
+}
+:root[data-theme="dark"] {
+  @include theme(dark);
+}
+
+body {
+  background: var(--lp-paper);
+  color: var(--lp-ink);
+  font-family: $font-sans;
+}
+
+code,
+pre {
+  font-family: $font-mono;
+}
+
+.lp-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space * 4;
+  padding: ($space * 3) ($space * 6);
+  border-bottom: 1px solid var(--lp-line);
+}
+
+.lp-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: $space * 3;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+// The three Light Path LEDs: power, fault, locate.
+.lp-brand__leds {
+  display: inline-flex;
+  gap: $space;
+}
+.lp-led {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  &--power {
+    background: var(--lp-ok);
+  }
+  &--fault {
+    background: var(--lp-not-run);
+  }
+  &--locate {
+    background: var(--lp-accent);
+  }
+}
+
+.lp-shell {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: ($space * 8) ($space * 6) ($space * 16);
+  display: grid;
+  gap: $space * 6;
+}
+
+.lp-eyebrow {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lp-muted);
+}
+
+.lp-hint {
+  color: var(--lp-muted);
+}

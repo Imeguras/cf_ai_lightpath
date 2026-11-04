@@ -1,0 +1,16 @@
+{
+  "id": "paru-aur-info-zfs",
+  "argv": [
+    "paru",
+    "-Sai",
+    "zfs-dkms",
+    "zfs-utils"
+  ],
+  "started_at": "2026-11-04T17:32:45.07796368Z",
+  "duration_ms": 659,
+  "exit_code": 0,
+  "stdout": "Repository      : aur\nName            : zfs-dkms\nVersion         : 2.4.4-1\nDescription     : Kernel modules for the Zettabyte File System.\nURL             : https://zfsonlinux.org/\nAUR URL         : https://aur.archlinux.org/packages/zfs-dkms\nGroups          : None\nLicenses        : CDDL\nProvides        : ZFS-MODULE=2.4.4  SPL-MODULE=2.4.4  zfs\nDepends On      : zfs-utils=2.4.4  dkms\nMake Deps       : None\nCheck Deps      : None\nOptional Deps   : None\nConflicts With  : None\nMaintainer      : kstolp\nVotes           : 200\nPopularity      : 0.474616\nFirst Submitted : Mon, 31 Aug 2015 12:01:51\nLast Modified   : Sat, 22 Aug 2026 00:33:36\nOut Of Date     : No\n\nRepository      : aur\nName            : zfs-utils\nVersion         : 2.4.4-1\nDescription     : Userspace utilities for the Zettabyte File System.\nURL             : https://zfsonlinux.org/\nAUR URL         : https://aur.archlinux.org/packages/zfs-utils\nGroups          : None\nLicenses        : CDDL\nProvides        : None\nDepends On      : None\nMake Deps       : None\nCheck Deps      : None\nOptional Deps   : python\nConflicts With  : None\nMaintainer      : kstolp\nVotes           : 81\nPopularity      : 0.394668\nFirst Submitted : Sun, 28 Oct 2018 22:49:02\nLast Modified   : Sat, 22 Aug 2026 00:33:35\nOut Of Date     : No\n\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

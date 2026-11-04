@@ -18,6 +18,11 @@ services:
       PHX_HOST: ${PHX_HOST:-localhost}
       # One variable sets both the app's listen port and the host mapping.
       PORT: ${LIGHTPATH_PORT:-4100}
+      # The evidence page shows the newest set under this directory.
+      LIGHTPATH_FIXTURES_ROOT: /fixtures
+    volumes:
+      # Public (scrubbed) fixtures only; raw output never enters the container.
+      - ./fixtures/public:/fixtures:ro
     ports:
       # Loopback only; nothing is exposed to the LAN until we decide to.
       - "127.0.0.1:${LIGHTPATH_PORT:-4100}:${LIGHTPATH_PORT:-4100}"

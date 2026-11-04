@@ -1,0 +1,16 @@
+{
+  "id": "lsblk",
+  "argv": [
+    "lsblk",
+    "-J",
+    "-o",
+    "NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,MODEL"
+  ],
+  "started_at": "2026-11-04T17:32:50.373190366Z",
+  "duration_ms": 172,
+  "exit_code": 0,
+  "stdout": "{\n   \"blockdevices\": [\n      {\n         \"name\": \"sda\",\n         \"size\": \"447.1G\",\n         \"type\": \"disk\",\n         \"fstype\": null,\n         \"mountpoint\": null,\n         \"model\": \"WDC WDS480G2G0A-00JH30\",\n         \"children\": [\n            {\n               \"name\": \"sda1\",\n               \"size\": \"2.1G\",\n               \"type\": \"part\",\n               \"fstype\": \"ntfs\",\n               \"mountpoint\": null,\n               \"model\": null\n            },{\n               \"name\": \"sda2\",\n               \"size\": \"1K\",\n               \"type\": \"part\",\n               \"fstype\": null,\n               \"mountpoint\": null,\n               \"model\": null\n            },{\n               \"name\": \"sda5\",\n               \"size\": \"244.1G\",\n               \"type\": \"part\",\n               \"fstype\": \"ntfs\",\n               \"mountpoint\": null,\n               \"model\": null\n            },{\n               \"name\": \"sda6\",\n               \"size\": \"200.8G\",\n               \"type\": \"part\",\n               \"fstype\": \"ntfs\",\n               \"mountpoint\": null,\n               \"model\": null\n            }\n         ]\n      },{\n         \"name\": \"nvme0n1\",\n         \"size\": \"931.5G\",\n         \"type\": \"disk\",\n         \"fstype\": null,\n         \"mountpoint\": null,\n         \"model\": \"FIKWOT FN950 1TB\",\n         \"children\": [\n            {\n               \"name\": \"nvme0n1p1\",\n               \"size\": \"1G\",\n               \"type\": \"part\",\n               \"fstype\": \"vfat\",\n               \"mountpoint\": \"/boot\",\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p2\",\n               \"size\": \"64G\",\n               \"type\": \"part\",\n               \"fstype\": \"swap\",\n               \"mountpoint\": \"[SWAP]\",\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p3\",\n               \"size\": \"866.5G\",\n               \"type\": \"part\",\n               \"fstype\": \"ext4\",\n               \"mountpoint\": \"/\",\n               \"model\": null\n            }\n         ]\n      }\n   ]\n}\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

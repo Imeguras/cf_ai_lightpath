@@ -1,0 +1,18 @@
+{
+  "id": "virsh-system-list",
+  "argv": [
+    "virsh",
+    "-r",
+    "-c",
+    "qemu:///system",
+    "list",
+    "--all"
+  ],
+  "started_at": "2026-11-04T17:32:53.34559224Z",
+  "duration_ms": 398,
+  "exit_code": 0,
+  "stdout": " Id   Name       State\n--------------------------\n 1    OPNsense   running\n\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

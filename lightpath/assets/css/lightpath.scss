@@ -1,0 +1,4 @@
+// Lightpath components (SCSS). Tailwind still styles the generated Phoenix
+// components; everything of ours lives here.
+@use "lightpath/base";
+@use "lightpath/evidence";

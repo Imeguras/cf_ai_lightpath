@@ -1,0 +1,53 @@
+// Design tokens. Each theme defines only a handful of base colours; every
+// other shade is derived from them with color.mix, so there are no hand-picked
+// near-duplicates to keep in sync.
+@use "sass:color";
+@use "sass:map";
+
+// The three states a fixture can be in, named after the classes we emit.
+$statuses: (ok, failed, not-run);
+
+$themes: (
+  light: (
+    ink: #1c2320,
+    paper: #f4f5f2,
+    accent: #2b7a6e,
+    ok: #2f7d4f,
+    failed: #b4392a,
+    not-run: #8a6d1f,
+  ),
+  dark: (
+    ink: #e1e6e3,
+    paper: #111513,
+    accent: #5eb4a6,
+    ok: #6cc08a,
+    failed: #e6735f,
+    not-run: #d6b24e,
+  ),
+);
+
+$font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+$font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+$space: 0.25rem;
+$radius: 6px;
+
+// Emits one theme as CSS custom properties.
+@mixin theme($name) {
+  $c: map.get($themes, $name);
+  $ink: map.get($c, ink);
+  $paper: map.get($c, paper);
+
+  color-scheme: $name;
+  --lp-ink: #{$ink};
+  --lp-paper: #{$paper};
+  --lp-accent: #{map.get($c, accent)};
+  --lp-surface: #{color.mix($paper, $ink, 96%)};
+  --lp-line: #{color.mix($paper, $ink, 82%)};
+  --lp-muted: #{color.mix($ink, $paper, 62%)};
+
+  @each $s in $statuses {
+    --lp-#{$s}: #{map.get($c, $s)};
+    --lp-#{$s}-tint: #{color.mix(map.get($c, $s), $paper, 14%)};
+  }
+}

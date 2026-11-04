@@ -1,0 +1,15 @@
+{
+  "id": "modules-dirs",
+  "argv": [
+    "ls",
+    "-1",
+    "/usr/lib/modules"
+  ],
+  "started_at": "2026-11-04T17:32:40.934744678Z",
+  "duration_ms": 153,
+  "exit_code": 0,
+  "stdout": "7.2.14-arch1-1\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

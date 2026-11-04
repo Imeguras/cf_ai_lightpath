@@ -1,0 +1,14 @@
+{
+  "id": "ethtool-ens9d1",
+  "argv": [
+    "ethtool",
+    "ens9d1"
+  ],
+  "started_at": "2026-11-04T17:32:51.542371285Z",
+  "duration_ms": 162,
+  "exit_code": 0,
+  "stdout": "Settings for ens9d1:\n\tSupported ports: [ FIBRE ]\n\tSupported link modes:   10000baseKX4/Full\n\t                        40000baseCR4/Full\n\t                        40000baseSR4/Full\n\t                        56000baseCR4/Full\n\t                        56000baseSR4/Full\n\t                        1000baseX/Full\n\t                        10000baseCR/Full\n\t                        10000baseSR/Full\n\tSupported pause frame use: Symmetric Receive-only\n\tSupports auto-negotiation: Yes\n\tSupported FEC modes: Not reported\n\tAdvertised link modes:  10000baseKX4/Full\n\t                        40000baseCR4/Full\n\t                        40000baseSR4/Full\n\t                        1000baseX/Full\n\t                        10000baseCR/Full\n\t                        10000baseSR/Full\n\tAdvertised pause frame use: Symmetric\n\tAdvertised auto-negotiation: Yes\n\tAdvertised FEC modes: Not reported\n\tSpeed: Unknown!\n\tDuplex: Unknown! (255)\n\tAuto-negotiation: off\n\tPort: FIBRE\n\tPHYAD: 0\n\tTransceiver: internal\n        Current message level: 0x00000014 (20)\n                               link ifdown\n\tLink detected: no\n",
+  "stderr": "netlink error: Operation not permitted\n",
+  "truncated": false,
+  "timed_out": false
+}

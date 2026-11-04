@@ -1,0 +1,15 @@
+{
+  "id": "pacman-qi-zfs-utils",
+  "argv": [
+    "pacman",
+    "-Qi",
+    "zfs-utils"
+  ],
+  "started_at": "2026-11-04T17:32:42.480248765Z",
+  "duration_ms": 207,
+  "exit_code": 0,
+  "stdout": "Name            : zfs-utils\nVersion         : 2.4.0-1\nDescription     : Userspace utilities for the Zettabyte File System.\nArchitecture    : x86_64\nURL             : https://zfsonlinux.org/\nLicenses        : CDDL\nGroups          : None\nProvides        : None\nDepends On      : None\nOptional Deps   : python: for arcstat/arc_summary/dbufstat [installed]\nRequired By     : zfs-dkms\nOptional For    : None\nConflicts With  : None\nReplaces        : None\nInstalled Size  : 9.40 MiB\nPackager        : Unknown Packager\nBuild Date      : Wed Dec 31 18:51:04 2025\nInstall Date    : Wed Dec 31 19:31:56 2025\nInstall Reason  : Installed as a dependency for another package\nInstall Script  : No\nValidated By    : None\n\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

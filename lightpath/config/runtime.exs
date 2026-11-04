@@ -23,6 +23,10 @@ end
 config :lightpath, LightpathWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+if root = System.get_env("LIGHTPATH_FIXTURES_ROOT") do
+  config :lightpath, :fixtures_root, root
+end
+
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you

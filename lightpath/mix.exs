@@ -48,6 +48,7 @@ defmodule Lightpath.MixProject do
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
+      {:dart_sass, "~> 0.8", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.2.0",
@@ -72,10 +73,15 @@ defmodule Lightpath.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "assets.setup", "assets.build"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["compile", "tailwind lightpath", "esbuild lightpath"],
+      "assets.setup": [
+        "tailwind.install --if-missing",
+        "sass.install --if-missing",
+        "esbuild.install --if-missing"
+      ],
+      "assets.build": ["compile", "tailwind lightpath", "sass lightpath", "esbuild lightpath"],
       "assets.deploy": [
         "tailwind lightpath --minify",
+        "sass lightpath --no-source-map --style=compressed",
         "esbuild lightpath --minify",
         "phx.digest"
       ],

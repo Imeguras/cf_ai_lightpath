@@ -1,0 +1,14 @@
+{
+  "id": "modinfo-zfs",
+  "argv": [
+    "modinfo",
+    "zfs"
+  ],
+  "started_at": "2026-11-04T17:32:47.045090963Z",
+  "duration_ms": 161,
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "modinfo: ERROR: Module zfs not found.\n",
+  "truncated": false,
+  "timed_out": false
+}

@@ -1,0 +1,14 @@
+{
+  "id": "zfs-list",
+  "argv": [
+    "zfs",
+    "list"
+  ],
+  "started_at": "2026-11-04T17:32:47.556402774Z",
+  "duration_ms": 170,
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "The ZFS modules cannot be auto-loaded.\nTry running 'modprobe zfs' as root to manually load them.\n",
+  "truncated": false,
+  "timed_out": false
+}

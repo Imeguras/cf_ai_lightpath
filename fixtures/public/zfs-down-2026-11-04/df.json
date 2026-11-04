@@ -1,0 +1,14 @@
+{
+  "id": "df",
+  "argv": [
+    "df",
+    "-hT"
+  ],
+  "started_at": "2026-11-04T17:32:50.545836405Z",
+  "duration_ms": 164,
+  "exit_code": 0,
+  "stdout": "Filesystem     Type      Size  Used Avail Use% Mounted on\n/dev/nvme0n1p3 ext4      852G  476G  333G  59% /\ndevtmpfs       devtmpfs   63G     0   63G   0% /dev\ntmpfs          tmpfs      63G     0   63G   0% /dev/shm\nefivarfs       efivarfs  640K  443K  192K  70% /sys/firmware/efi/efivars\ntmpfs          tmpfs      26G  2.9M   26G   1% /run\nnone           tmpfs     1.0M     0  1.0M   0% /run/credentials/systemd-journald.service\ntmpfs          tmpfs      63G     0   63G   0% /tmp\n/dev/nvme0n1p1 vfat     1022M   61M  962M   6% /boot\nnone           tmpfs     1.0M     0  1.0M   0% /run/credentials/getty@tty1.service\ntmpfs          tmpfs      13G  4.0K   13G   1% /run/user/1000\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

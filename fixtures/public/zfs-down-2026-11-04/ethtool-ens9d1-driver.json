@@ -1,0 +1,15 @@
+{
+  "id": "ethtool-ens9d1-driver",
+  "argv": [
+    "ethtool",
+    "-i",
+    "ens9d1"
+  ],
+  "started_at": "2026-11-04T17:32:51.704983346Z",
+  "duration_ms": 158,
+  "exit_code": 0,
+  "stdout": "driver: mlx4_en\nversion: 4.0-0\nfirmware-version: 2.42.5000\nexpansion-rom-version: \nbus-info: 0000:11:00.0\nsupports-statistics: yes\nsupports-test: yes\nsupports-eeprom-access: no\nsupports-register-dump: no\nsupports-priv-flags: yes\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

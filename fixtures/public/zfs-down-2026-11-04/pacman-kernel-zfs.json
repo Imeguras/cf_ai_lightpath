@@ -1,0 +1,20 @@
+{
+  "id": "pacman-kernel-zfs",
+  "argv": [
+    "pacman",
+    "-Q",
+    "linux",
+    "linux-headers",
+    "linux-lts",
+    "linux-lts-headers",
+    "zfs-dkms",
+    "zfs-utils"
+  ],
+  "started_at": "2026-11-04T17:32:41.835902509Z",
+  "duration_ms": 429,
+  "exit_code": 1,
+  "stdout": "linux 7.2.14.arch1-1\nlinux-headers 7.2.14.arch1-1\nzfs-dkms 2.4.0-1\nzfs-utils 2.4.0-1\n",
+  "stderr": "error: package 'linux-lts' was not found\nerror: package 'linux-lts-headers' was not found\n",
+  "truncated": false,
+  "timed_out": false
+}

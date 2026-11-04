@@ -1,0 +1,14 @@
+{
+  "id": "paru-version",
+  "argv": [
+    "paru",
+    "--version"
+  ],
+  "started_at": "2026-11-04T17:32:43.130746804Z",
+  "duration_ms": 196,
+  "exit_code": 0,
+  "stdout": "paru v2.2.0 - libalpm v16.0.1\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

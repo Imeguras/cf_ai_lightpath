@@ -1,0 +1,16 @@
+{
+  "id": "systemctl-failed",
+  "argv": [
+    "systemctl",
+    "--failed",
+    "--no-pager",
+    "--plain"
+  ],
+  "started_at": "2026-11-04T17:32:47.727258098Z",
+  "duration_ms": 166,
+  "exit_code": 0,
+  "stdout": "UNIT LOAD ACTIVE SUB DESCRIPTION\n\n0 loaded units listed.\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

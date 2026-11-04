@@ -1,0 +1,14 @@
+{
+  "id": "zpool-status",
+  "argv": [
+    "zpool",
+    "status"
+  ],
+  "started_at": "2026-11-04T17:32:47.206492036Z",
+  "duration_ms": 172,
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "The ZFS modules cannot be auto-loaded.\nTry running 'modprobe zfs' as root to manually load them.\n",
+  "truncated": false,
+  "timed_out": false
+}

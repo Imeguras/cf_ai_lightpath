@@ -1,0 +1,15 @@
+{
+  "id": "dmesg",
+  "argv": [
+    "dmesg",
+    "--time-format",
+    "iso"
+  ],
+  "started_at": "2026-11-04T17:32:50.207418836Z",
+  "duration_ms": 165,
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "dmesg: read kernel buffer failed: Operation not permitted\n",
+  "truncated": false,
+  "timed_out": false
+}

@@ -1,0 +1,18 @@
+{
+  "id": "virsh-system-nets",
+  "argv": [
+    "virsh",
+    "-r",
+    "-c",
+    "qemu:///system",
+    "net-list",
+    "--all"
+  ],
+  "started_at": "2026-11-04T17:32:54.05970607Z",
+  "duration_ms": 223,
+  "exit_code": 0,
+  "stdout": " Name      State    Autostart   Persistent\n--------------------------------------------\n default   active   yes         yes\n\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

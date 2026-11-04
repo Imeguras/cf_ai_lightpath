@@ -31,6 +31,20 @@ config :esbuild,
     env: %{"NODE_PATH" => [Path.expand("../deps", __DIR__), Mix.Project.build_path()]}
   ]
 
+# Where public fixture sets live (one per subdirectory; the newest is shown).
+# Releases override this with LIGHTPATH_FIXTURES_ROOT (config/runtime.exs).
+config :lightpath, :fixtures_root, Path.expand("../../fixtures/public", __DIR__)
+
+# Configure dart_sass (the version is required). Our own components are
+# written in SCSS (assets/css/lightpath.scss); Tailwind keeps handling the
+# generated Phoenix components and utilities.
+config :dart_sass,
+  version: "1.107.1",
+  lightpath: [
+    args: ~w(css/lightpath.scss ../priv/static/assets/css/lightpath.css),
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "4.1.12",

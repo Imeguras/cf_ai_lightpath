@@ -1,0 +1,182 @@
+// The evidence page.
+@use "tokens" as *;
+
+// One rule per status, generated: sets --lp-status for whatever uses it.
+@each $s in $statuses {
+  .lp-status--#{$s} {
+    --lp-status: var(--lp-#{$s});
+    --lp-status-tint: var(--lp-#{$s}-tint);
+  }
+}
+
+.lp-set {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: $space * 6;
+
+  &__name {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  &__meta {
+    color: var(--lp-muted);
+    margin-top: $space * 2;
+  }
+}
+
+.lp-counts {
+  display: flex;
+  gap: $space * 3;
+
+  li {
+    display: grid;
+    min-width: 5.5rem;
+    padding: ($space * 2) ($space * 4);
+    border-radius: $radius;
+    background: var(--lp-status-tint);
+    border-left: 3px solid var(--lp-status);
+  }
+  &__n {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--lp-status);
+  }
+  &__label {
+    font-size: 0.8rem;
+    color: var(--lp-muted);
+  }
+}
+
+.lp-evidence {
+  display: grid;
+  grid-template-columns: minmax(14rem, 18rem) 1fr;
+  gap: $space * 6;
+  align-items: start;
+
+  @media (max-width: 48rem) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lp-list {
+  display: grid;
+  border: 1px solid var(--lp-line);
+  border-radius: $radius;
+  background: var(--lp-surface);
+  max-height: 75vh;
+  overflow-y: auto;
+
+  &__item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: $space * 2;
+    padding: ($space * 1.5) ($space * 3);
+    font-family: $font-mono;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--lp-line);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+    &:hover,
+    &.is-selected {
+      background: var(--lp-status-tint);
+    }
+    &.is-selected {
+      box-shadow: inset 3px 0 0 var(--lp-status);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--lp-accent);
+      outline-offset: -2px;
+    }
+  }
+  &__exit {
+    color: var(--lp-muted);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.lp-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--lp-status);
+}
+
+.lp-detail {
+  display: grid;
+  gap: $space * 4;
+  min-width: 0;
+
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space * 3;
+    h2 {
+      font-family: $font-mono;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+  }
+  h3 {
+    font-size: 0.8rem;
+    font-family: $font-mono;
+    color: var(--lp-muted);
+    margin-bottom: $space;
+  }
+}
+
+.lp-chip {
+  font-size: 0.8rem;
+  padding: $space ($space * 2.5);
+  border-radius: 999px;
+  color: var(--lp-status);
+  background: var(--lp-status-tint);
+}
+
+%lp-block {
+  padding: ($space * 3) ($space * 4);
+  border-radius: $radius;
+  border: 1px solid var(--lp-line);
+  background: var(--lp-surface);
+  overflow-x: auto;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.lp-cmd {
+  @extend %lp-block;
+}
+.lp-out {
+  @extend %lp-block;
+  max-height: 60vh;
+  white-space: pre;
+
+  &--err {
+    border-left: 3px solid var(--lp-failed);
+  }
+}
+
+.lp-error,
+.lp-notice {
+  padding: ($space * 3) ($space * 4);
+  border-radius: $radius;
+  background: var(--lp-not-run-tint);
+  border-left: 3px solid var(--lp-not-run);
+}
+
+.lp-empty {
+  display: grid;
+  gap: $space * 3;
+  max-width: 44rem;
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+}

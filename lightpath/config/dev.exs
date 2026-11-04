@@ -16,7 +16,8 @@ config :lightpath, LightpathWeb.Endpoint,
   secret_key_base: "kr8sNXg9Up3tHBgzS1MktTMT+bFDwaoNrfacfVInNMAr9rLxHuHW0k7YwiPtcHV7",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:lightpath, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:lightpath, ~w(--watch)]}
+    tailwind: {Tailwind, :install_and_run, [:lightpath, ~w(--watch)]},
+    sass: {DartSass, :install_and_run, [:lightpath, ~w(--embed-source-map --watch)]}
   ]
 
 # ## SSL Support

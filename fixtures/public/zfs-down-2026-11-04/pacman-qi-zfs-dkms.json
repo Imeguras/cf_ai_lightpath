@@ -1,0 +1,15 @@
+{
+  "id": "pacman-qi-zfs-dkms",
+  "argv": [
+    "pacman",
+    "-Qi",
+    "zfs-dkms"
+  ],
+  "started_at": "2026-11-04T17:32:42.264958802Z",
+  "duration_ms": 215,
+  "exit_code": 0,
+  "stdout": "Name            : zfs-dkms\nVersion         : 2.4.0-1\nDescription     : Kernel modules for the Zettabyte File System.\nArchitecture    : any\nURL             : https://zfsonlinux.org/\nLicenses        : CDDL\nGroups          : None\nProvides        : ZFS-MODULE=2.4.0  SPL-MODULE=2.4.0  zfs\nDepends On      : zfs-utils=2.4.0  dkms\nOptional Deps   : None\nRequired By     : cockpit-zfs-manager\nOptional For    : None\nConflicts With  : None\nReplaces        : None\nInstalled Size  : 18.76 MiB\nPackager        : Unknown Packager\nBuild Date      : Wed Dec 31 19:08:25 2025\nInstall Date    : Wed Dec 31 19:08:43 2025\nInstall Reason  : Explicitly installed\nInstall Script  : No\nValidated By    : None\n\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}
