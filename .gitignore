@@ -1,0 +1,34 @@
+# Local secrets: .env and any variant (.env.local, .env.prod...), but keep the template.
+.env
+.env.*
+!.env.example
+
+# Raw probe output is private (hostnames, IPs, serials). Only scrubbed fixtures are published.
+fixtures/raw/
+
+# Private tooling (the PROMPTS exporter holds the redaction list itself)
+private/
+
+# Build output
+probe/bin/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Neovim / Vim
+*.swp
+*.swo
+*~
+Session.vim
+.netrwhist
+tags
+
+# Elixir language servers (ElixirLS, Lexical, Next LS, Expert)
+.elixir_ls/
+.lexical/
+.elixir-tools/
+.expert/
+
+# OS
+.DS_Store

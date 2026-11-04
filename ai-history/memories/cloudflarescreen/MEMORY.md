@@ -1,0 +1,4 @@
+- [Cloudflare assignment](cloudflare-assignment.md) — fast-track AI app for SRE Core; ai-history/ is public, keep it redacted
+- [Cap drop reminder](cap-drop-reminder.md) — containers drop all caps; on permission failures, remind João it may be the cause
+- [Homeserver Docker mode](homeserver-docker-rootless.md) — unknown if rootless; stay compatible (ports ≥1024, no privileged)
+- [Single config knob](single-config-knob.md) — one variable per value; never two places to edit
