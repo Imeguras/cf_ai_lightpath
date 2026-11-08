@@ -1,0 +1,19 @@
+{
+  "id": "systemctl-zfs",
+  "argv": [
+    "systemctl",
+    "status",
+    "--no-pager",
+    "zfs-import-cache.service",
+    "zfs-import-scan.service",
+    "zfs-mount.service",
+    "zfs.target"
+  ],
+  "started_at": "2026-11-08T18:42:44.149070452Z",
+  "duration_ms": 311,
+  "exit_code": 3,
+  "stdout": "* zfs-import-cache.service - Import ZFS pools by cache file\n     Loaded: loaded (/usr/lib/systemd/system/zfs-import-cache.service; enabled; preset: enabled)\n     Active: inactive (dead)\n  Condition: start condition unmet at Sun 2026-11-08 15:23:47 UTC; 3h 15min ago\n       Docs: man:zpool(8)\n\nNov 08 15:23:47 labhost systemd[1]: Import ZFS pools by cache file skipped, unmet condition check ConditionPathIsDirectory=/sys/module/zfs\n\n* zfs-import-scan.service - Import ZFS pools by device scanning\n     Loaded: loaded (/usr/lib/systemd/system/zfs-import-scan.service; enabled; preset: disabled)\n     Active: inactive (dead)\n  Condition: start condition unmet at Sun 2026-11-08 15:23:47 UTC; 3h 15min ago\n       Docs: man:zpool(8)\n\nNov 08 15:23:47 labhost systemd[1]: Import ZFS pools by device scanning skipped, unmet condition check ConditionPathIsDirectory=/sys/module/zfs\n\n* zfs-mount.service - Mount ZFS filesystems\n     Loaded: loaded (/usr/lib/systemd/system/zfs-mount.service; enabled; preset: enabled)\n     Active: inactive (dead)\n  Condition: start condition unmet at Sun 2026-11-08 15:23:47 UTC; 3h 15min ago\n       Docs: man:zfs(8)\n\nNov 08 15:23:47 labhost systemd[1]: Mount ZFS filesystems skipped, unmet condition check ConditionPathIsDirectory=/sys/module/zfs\n\n* zfs.target - ZFS startup target\n     Loaded: loaded (/usr/lib/systemd/system/zfs.target; enabled; preset: enabled)\n     Active: active since Sun 2026-11-08 15:23:47 UTC; 3h 15min ago\n Invocation: ec350e9e6fd34b3f9ad229b7984e9fc3\n\nNov 08 15:23:47 labhost systemd[1]: Reached target ZFS startup target.\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

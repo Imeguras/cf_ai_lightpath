@@ -1,0 +1,25 @@
+{
+  "id": "journal-zfs",
+  "argv": [
+    "journalctl",
+    "-b",
+    "--no-pager",
+    "-n",
+    "300",
+    "-o",
+    "short-iso",
+    "-u",
+    "zfs-import-cache.service",
+    "-u",
+    "zfs-import-scan.service",
+    "-u",
+    "zfs-mount.service"
+  ],
+  "started_at": "2026-11-08T18:42:45.57251101Z",
+  "duration_ms": 601,
+  "exit_code": 0,
+  "stdout": "2026-11-08T15:23:47+00:00 labhost systemd[1]: Import ZFS pools by cache file skipped, unmet condition check ConditionPathIsDirectory=/sys/module/zfs\n2026-11-08T15:23:47+00:00 labhost systemd[1]: Import ZFS pools by device scanning skipped, unmet condition check ConditionPathIsDirectory=/sys/module/zfs\n2026-11-08T15:23:47+00:00 labhost systemd[1]: Mount ZFS filesystems skipped, unmet condition check ConditionPathIsDirectory=/sys/module/zfs\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

@@ -1,0 +1,36 @@
+# Lightpath live probe, built from this repository (no download):
+#   cd deploy/arch && makepkg -si
+pkgname=lightpathd
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Lightpath live probe: read-only, event-driven homelab evidence"
+arch=('x86_64')
+license=('custom')
+depends=('systemd' 'pacman')
+optdepends=('ipmitool: BMC sensors' 'ethtool: link details' 'libvirt: VM state' 'paru: AUR checks')
+makedepends=('go')
+source=('lightpathd.service' 'lightpath.sysusers' 'lightpath.tmpfiles' '60-lightpath-ipmi.rules'
+        'lightpath-install.hook' 'lightpath-upgrade.hook' 'lightpath-remove.hook')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+build() {
+  cd "$startdir/../../probe"
+  export CGO_ENABLED=0 GOFLAGS="-trimpath -mod=readonly -modcacherw"
+  go build -ldflags "-s -w" -o "$srcdir/lightpathd" ./cmd/lightpathd
+}
+
+check() {
+  cd "$startdir/../../probe"
+  go test ./...
+}
+
+package() {
+  install -Dm755 "$srcdir/lightpathd" "$pkgdir/usr/bin/lightpathd"
+  install -Dm644 lightpathd.service "$pkgdir/usr/lib/systemd/system/lightpathd.service"
+  install -Dm644 lightpath.sysusers "$pkgdir/usr/lib/sysusers.d/lightpath.conf"
+  install -Dm644 lightpath.tmpfiles "$pkgdir/usr/lib/tmpfiles.d/lightpath.conf"
+  install -Dm644 60-lightpath-ipmi.rules "$pkgdir/usr/lib/udev/rules.d/60-lightpath-ipmi.rules"
+  for h in install upgrade remove; do
+    install -Dm644 "lightpath-$h.hook" "$pkgdir/usr/share/libalpm/hooks/lightpath-$h.hook"
+  done
+}

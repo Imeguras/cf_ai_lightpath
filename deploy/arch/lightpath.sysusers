@@ -1,0 +1,3 @@
+# The probe user, and the group that may open /dev/ipmi0.
+u hlprobe - "Lightpath live probe" /var/lib/lightpath
+g ipmi -

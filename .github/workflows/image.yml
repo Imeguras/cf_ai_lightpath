@@ -1,0 +1,30 @@
+# Builds the web app image (public fixtures baked in) and pushes it to
+# GitHub Container Registry as ghcr.io/<owner>/cf_ai_lightpath:<sha> and
+# :latest. Uses the workflow's own token; no personal access token.
+name: image
+
+on:
+  push:
+    branches: [master]
+    paths: [lightpath/**, fixtures/public/**, .github/workflows/image.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io --username "${{ github.actor }}" --password-stdin
+
+      - name: Build and push
+        run: |
+          image="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker build --build-context fixtures=fixtures/public \
+            --tag "$image:${GITHUB_SHA::7}" --tag "$image:latest" lightpath
+          docker push --all-tags "$image"

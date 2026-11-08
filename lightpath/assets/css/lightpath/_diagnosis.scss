@@ -1,0 +1,119 @@
+// The diagnosis panel: ranked causes with probability bars.
+@use "tokens" as *;
+
+.lp-diagnosis {
+  display: grid;
+  gap: $space * 4;
+  padding: ($space * 5) ($space * 6);
+  border: 1px solid var(--lp-line);
+  border-radius: $radius;
+  background: var(--lp-surface);
+
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: space-between;
+    gap: $space * 3;
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+  }
+}
+
+// The review status: loud while a rule is unreviewed.
+.lp-review {
+  max-width: 28rem;
+  font-size: 0.8rem;
+  padding: ($space * 1.5) ($space * 3);
+  border-radius: $radius;
+  background: var(--lp-not-run-tint);
+  border-left: 3px solid var(--lp-not-run);
+}
+
+.lp-causes {
+  display: grid;
+  gap: $space * 3;
+}
+
+.lp-cause {
+  display: grid;
+  gap: $space * 1.5;
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    gap: $space * 4;
+  }
+  &__pct {
+    font-family: $font-mono;
+    font-variant-numeric: tabular-nums;
+    color: var(--lp-muted);
+  }
+  &.is-top &__title {
+    font-weight: 600;
+  }
+  &.is-top &__pct {
+    color: var(--lp-accent);
+    font-weight: 600;
+  }
+}
+
+.lp-bar {
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--lp-line);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    min-width: 2px;
+    background: var(--lp-muted);
+  }
+  .is-top & span {
+    background: var(--lp-accent);
+  }
+}
+
+.lp-contrib {
+  display: grid;
+  gap: $space;
+  padding-left: $space * 3;
+  font-size: 0.85rem;
+  color: var(--lp-muted);
+
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: $space * 2;
+  }
+}
+
+// Ratios above 1 push a cause up; below 1 push it down.
+.lp-ratio {
+  min-width: 3.2rem;
+  font-family: $font-mono;
+  font-variant-numeric: tabular-nums;
+  color: var(--lp-failed);
+
+  &.is-up {
+    color: var(--lp-ok);
+  }
+}
+
+.lp-src {
+  font-family: $font-mono;
+  font-size: 0.78rem;
+  padding: 0 ($space * 1.5);
+  border-radius: $radius;
+  border: 1px solid var(--lp-line);
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--lp-accent);
+    color: var(--lp-accent);
+  }
+}

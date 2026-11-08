@@ -1,39 +1,114 @@
-# Early local stack. Only the Lightpath web app exists so far; the Worker runs with
-# `wrangler dev` (phase 4) and the probe runs on the host, not in a container
-# (phase 7), because it reads host devices and the journal.
+# Lightpath, local stack. Pick an environment with a profile:
 #
-#   cp .env.example .env    # then fill in SECRET_KEY_BASE
-#   docker compose up --build
-#   open http://127.0.0.1:4100   (LIGHTPATH_PORT in .env changes it)
+#   make dev    docker compose --profile dev up    web app + Worker (wrangler dev)
+#   make prod   docker compose --profile prod up   web app only, against the deployed Worker
+#   make home   docker compose --profile home up   on the server: live evidence from
+#                                                  lightpathd (deploy/arch), deployed Worker
+#
+# Setup: cp .env.example .env and fill it in. Then open
+# http://localhost:4100 (LIGHTPATH_PORT in .env changes it). Use the PHX_HOST
+# name, not 127.0.0.1: LiveView refuses websockets from any other origin.
+# The live probe (lightpathd) runs on the server as a systemd service, not in
+# a container: it reads the journal and host devices (deploy/arch).
 
 name: lightpath
 
+# Hardening shared by every service. cap_drop ALL is the strict option: if
+# something fails with "operation not permitted", suspect it first and add
+# back only the capability it needs.
+x-hardening: &hardening
+  read_only: true
+  tmpfs:
+    - /tmp
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+
+# The web app, identical in every profile except for the Worker it talks to.
+x-web: &web
+  <<: *hardening
+  build:
+    context: ./lightpath
+    # Bakes the public fixtures into the image (see lightpath/Dockerfile).
+    additional_contexts:
+      fixtures: ./fixtures/public
+  image: lightpath:dev
+  environment: &web-env
+    SECRET_KEY_BASE: ${SECRET_KEY_BASE:?set SECRET_KEY_BASE in .env (mix phx.gen.secret)}
+    PHX_HOST: ${PHX_HOST:-localhost}
+    # One variable sets both the app's listen port and the host mapping.
+    PORT: ${LIGHTPATH_PORT:-4100}
+    # The evidence page shows the newest set under this directory.
+    LIGHTPATH_FIXTURES_ROOT: /fixtures
+    # Signs the JWT on every Worker request (the Worker has the same secret).
+    LIGHTPATH_JWT_SECRET: ${LIGHTPATH_JWT_SECRET:?set LIGHTPATH_JWT_SECRET in .env (openssl rand -hex 32)}
+  volumes:
+    # Public (scrubbed) fixtures only; raw output never enters the container.
+    - ./fixtures/public:/fixtures:ro
+  ports:
+    # Loopback unless LIGHTPATH_BIND in .env says otherwise (prod on the LAN).
+    - "${LIGHTPATH_BIND:-127.0.0.1}:${LIGHTPATH_PORT:-4100}:${LIGHTPATH_PORT:-4100}"
+  restart: unless-stopped
+
 services:
-  lightpath:
-    build:
-      context: ./lightpath
-    image: lightpath:dev
+  web-dev:
+    <<: *web
+    profiles: [dev]
     environment:
-      SECRET_KEY_BASE: ${SECRET_KEY_BASE:?set SECRET_KEY_BASE in .env (mix phx.gen.secret)}
-      PHX_HOST: ${PHX_HOST:-localhost}
-      # One variable sets both the app's listen port and the host mapping.
-      PORT: ${LIGHTPATH_PORT:-4100}
-      # The evidence page shows the newest set under this directory.
-      LIGHTPATH_FIXTURES_ROOT: /fixtures
+      <<: *web-env
+      LIGHTPATH_WORKER_URL: http://worker:8787
+    depends_on:
+      - worker
+
+  # wrangler dev (worker/Dockerfile.dev, pinned wrangler). Its port is
+  # not published: only web-dev reaches it, over the compose network. Workers
+  # AI runs on Cloudflare even in dev, so this uses the token from .env.
+  worker:
+    <<: *hardening
+    profiles: [dev]
+    build:
+      context: ./worker
+      dockerfile: Dockerfile.dev
+    image: lightpath-worker:dev
+    environment:
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN:?set CLOUDFLARE_API_TOKEN in .env}
+      CLOUDFLARE_ACCOUNT_ID: ${CLOUDFLARE_ACCOUNT_ID:?set CLOUDFLARE_ACCOUNT_ID in .env}
+      # wrangler writes logs and config under $HOME; the root filesystem is read-only.
+      HOME: /tmp
+      WRANGLER_SEND_METRICS: "false"
+      # wrangler dev exposes this environment to the Worker as bindings, which
+      # is how JWT_SECRET arrives without a file or a command-line argument.
+      CLOUDFLARE_INCLUDE_PROCESS_ENV: "true"
+      JWT_SECRET: ${LIGHTPATH_JWT_SECRET:?set LIGHTPATH_JWT_SECRET in .env}
     volumes:
-      # Public (scrubbed) fixtures only; raw output never enters the container.
-      - ./fixtures/public:/fixtures:ro
-    ports:
-      # Loopback only; nothing is exposed to the LAN until we decide to.
-      - "127.0.0.1:${LIGHTPATH_PORT:-4100}:${LIGHTPATH_PORT:-4100}"
-    # Hardening: the release needs no writes outside /tmp and no capabilities.
-    # cap_drop ALL is the strict option: if something fails with "operation not
-    # permitted", suspect this first and add back only the capability it needs.
-    read_only: true
-    tmpfs:
-      - /tmp
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges:true
+      # Read-write: wrangler insists on writing .wrangler/ next to the config.
+      - ./worker:/worker
     restart: unless-stopped
+
+  web:
+    <<: *web
+    profiles: [prod]
+    environment:
+      <<: *web-env
+      # The deployed Worker (deploy/terraform/worker). Empty hides the AI buttons.
+      LIGHTPATH_WORKER_URL: ${LIGHTPATH_WORKER_URL:-}
+
+  # Live mode, on the server itself: the evidence comes from lightpathd
+  # (deploy/arch), which publishes scrubbed sets and serves "Re-probe now" and
+  # the event timeline on its socket. The container joins the daemon's group
+  # to read both, nothing more: the daemon's raw (unscrubbed) runs are not
+  # mounted.
+  web-home:
+    <<: *web
+    profiles: [home]
+    environment:
+      <<: *web-env
+      LIGHTPATH_WORKER_URL: ${LIGHTPATH_WORKER_URL:?set LIGHTPATH_WORKER_URL in .env}
+      LIGHTPATH_PROBE_SOCKET: /run/lightpath/probe.sock
+    group_add:
+      # getent group hlprobe | cut -d: -f3
+      - ${LIGHTPATH_PROBE_GID:?set LIGHTPATH_PROBE_GID in .env (getent group hlprobe)}
+    volumes:
+      - /var/lib/lightpath/public:/fixtures:ro
+      - /run/lightpath:/run/lightpath:ro

@@ -1,0 +1,15 @@
+{
+  "id": "ethtool-ens9d1-module",
+  "argv": [
+    "ethtool",
+    "-m",
+    "ens9d1"
+  ],
+  "started_at": "2026-11-08T18:42:48.404872098Z",
+  "duration_ms": 171,
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "netlink error: Operation not permitted\n",
+  "truncated": false,
+  "timed_out": false
+}

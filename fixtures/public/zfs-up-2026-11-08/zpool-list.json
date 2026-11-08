@@ -1,0 +1,14 @@
+{
+  "id": "zpool-list",
+  "argv": [
+    "zpool",
+    "list"
+  ],
+  "started_at": "2026-11-08T18:42:43.625068133Z",
+  "duration_ms": 178,
+  "exit_code": 0,
+  "stdout": "no pools available\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

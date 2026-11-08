@@ -1,4 +1,7 @@
 - [Cloudflare assignment](cloudflare-assignment.md) — Lightpath (cf_ai_lightpath): fast-track AI app for SRE Core; ai-history/ is public, keep it redacted
-- [Cap drop reminder](cap-drop-reminder.md) — containers drop all caps; on permission failures, remind João it may be the cause
+- [Cap drop reminder](cap-drop-reminder.md) — containers drop all caps; on permission failures, remind the user it may be the cause
 - [Homeserver Docker mode](homeserver-docker-rootless.md) — rootful (checked 2026-11-04); stay rootless-compatible anyway
 - [Single config knob](single-config-knob.md) — one variable per value; never two places to edit
+- [Terraform, not OpenTofu](tooling-terraform-not-tofu.md) — Terraform for infra; vendor CLIs only optional for local dev; wrap in make
+- [Kill processes visibly](kill-processes-visibly.md) — ps -ef | grep X, read PID, kill -9; never pkill/pgrep -f
+- [No first name](no-first-name.md) — never address or refer to the user by first name; write "the user"/"you"

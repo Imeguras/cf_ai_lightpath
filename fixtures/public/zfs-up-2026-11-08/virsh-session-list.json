@@ -1,0 +1,18 @@
+{
+  "id": "virsh-session-list",
+  "argv": [
+    "virsh",
+    "-r",
+    "-c",
+    "qemu:///session",
+    "list",
+    "--all"
+  ],
+  "started_at": "2026-11-08T18:42:50.772893217Z",
+  "duration_ms": 217,
+  "exit_code": 0,
+  "stdout": " Id   Name      State\n--------------------------\n -    vm_b   shut off\n\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

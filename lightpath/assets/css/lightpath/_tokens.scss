@@ -4,8 +4,19 @@
 @use "sass:color";
 @use "sass:map";
 
-// The three states a fixture can be in, named after the classes we emit.
+// The three state colours, named after their CSS variables.
 $statuses: (ok, failed, not-run);
+
+// Every kind of fixture (Lightpath.Fixtures.kind/1, the lp-kind--* classes)
+// and the colour it borrows: only what the probe was not allowed to run is
+// grey (muted); everything else that failed is red or amber.
+$kinds: (
+  ok: ok,
+  failed: failed,
+  not-run: not-run,
+  inactive: not-run,
+  needs-privilege: muted,
+);
 
 $themes: (
   light: (
@@ -45,6 +56,7 @@ $radius: 6px;
   --lp-surface: #{color.mix($paper, $ink, 96%)};
   --lp-line: #{color.mix($paper, $ink, 82%)};
   --lp-muted: #{color.mix($ink, $paper, 62%)};
+  --lp-muted-tint: #{color.mix($ink, $paper, 8%)};
 
   @each $s in $statuses {
     --lp-#{$s}: #{map.get($c, $s)};

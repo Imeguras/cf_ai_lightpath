@@ -1,0 +1,2 @@
+# /dev/ipmi0 to the ipmi group, so the probe can read sensors without root.
+KERNEL=="ipmi*", SUBSYSTEM=="ipmi", GROUP="ipmi", MODE="0660"

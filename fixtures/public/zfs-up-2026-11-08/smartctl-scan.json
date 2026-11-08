@@ -1,0 +1,14 @@
+{
+  "id": "smartctl-scan",
+  "argv": [
+    "smartctl",
+    "--scan"
+  ],
+  "started_at": "2026-11-08T18:42:46.98292632Z",
+  "duration_ms": 213,
+  "exit_code": 0,
+  "stdout": "/dev/sda -d scsi # /dev/sda, SCSI device\n/dev/nvme0 -d nvme # /dev/nvme0, NVMe device\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

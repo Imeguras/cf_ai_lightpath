@@ -1,0 +1,248 @@
+// Navigation, usage, runbooks, suggestions, and the chat and news pages.
+@use "tokens" as *;
+
+.lp-nav {
+  display: flex;
+  gap: $space * 4;
+  margin-right: auto;
+  margin-left: $space * 6;
+  font-size: 0.9rem;
+
+  a {
+    color: var(--lp-muted);
+    padding-bottom: $space;
+    border-bottom: 2px solid transparent;
+
+    &:hover,
+    &.is-current {
+      color: var(--lp-ink);
+      border-bottom-color: var(--lp-accent);
+    }
+  }
+}
+
+.lp-usage {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  color: var(--lp-muted);
+}
+
+.lp-sets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space * 2;
+  margin-top: $space * 2;
+  font-family: $font-mono;
+  font-size: 0.75rem;
+
+  a {
+    padding: $space ($space * 2);
+    border: 1px solid var(--lp-line);
+    border-radius: $radius;
+    color: var(--lp-muted);
+
+    &.is-current {
+      color: var(--lp-ink);
+      border-color: var(--lp-accent);
+    }
+  }
+}
+
+.lp-runbook {
+  margin-top: $space * 2;
+  font-size: 0.85rem;
+
+  summary {
+    cursor: pointer;
+    color: var(--lp-accent);
+    font-weight: 600;
+  }
+
+  pre {
+    margin-top: $space * 2;
+    padding: ($space * 3) ($space * 4);
+    border-radius: $radius;
+    background: var(--lp-surface);
+    border: 1px solid var(--lp-line);
+    white-space: pre-wrap;
+    font-family: $font-mono;
+    font-size: 0.8rem;
+  }
+}
+
+.lp-runbook-missing {
+  margin-top: $space;
+  font-size: 0.75rem;
+}
+
+.lp-suggest {
+  display: grid;
+  gap: $space * 3;
+  justify-items: start;
+  margin-top: $space * 4;
+}
+
+.lp-chat,
+.lp-news {
+  display: grid;
+  gap: $space * 4;
+  max-width: 52rem;
+}
+
+.lp-chat__head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: $space * 4;
+}
+
+.lp-new-chat {
+  font-size: 0.85rem;
+  color: var(--lp-accent);
+}
+
+.lp-messages {
+  display: grid;
+  gap: $space * 3;
+}
+
+.lp-msg {
+  display: grid;
+  gap: $space;
+  padding: ($space * 3) ($space * 4);
+  border-radius: $radius;
+  border: 1px solid var(--lp-line);
+
+  &--user {
+    justify-self: end;
+    max-width: 85%;
+    background: var(--lp-surface);
+  }
+
+  &--assistant {
+    border-left: 3px solid var(--lp-accent);
+  }
+
+  &.is-pending {
+    opacity: 0.7;
+  }
+}
+
+.lp-msg__text {
+  white-space: pre-wrap;
+}
+
+.lp-why {
+  font-size: 0.8rem;
+}
+
+.lp-ask {
+  display: grid;
+  gap: $space * 2;
+
+  textarea {
+    font: inherit;
+    width: 100%;
+    padding: ($space * 3) ($space * 4);
+    border-radius: $radius;
+    border: 1px solid var(--lp-line);
+    background: var(--lp-surface);
+    color: var(--lp-ink);
+    resize: vertical;
+  }
+}
+
+.lp-ask__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--lp-muted);
+}
+
+.lp-news__items {
+  display: grid;
+  gap: $space * 2;
+
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: $space * 2;
+  }
+
+  time {
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    color: var(--lp-muted);
+  }
+
+  a {
+    color: var(--lp-accent);
+  }
+}
+
+.lp-match {
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  padding: 0 $space * 1.5;
+  border-radius: $radius;
+  color: var(--lp-ok);
+  background: var(--lp-ok-tint);
+}
+
+@media (max-width: 640px) {
+  .lp-top {
+    flex-wrap: wrap;
+  }
+
+  .lp-nav {
+    order: 3;
+    width: 100%;
+    margin: 0;
+  }
+}
+
+.lp-reprobe {
+  margin-top: $space * 3;
+}
+
+.lp-timeline {
+  display: grid;
+  gap: $space * 2;
+  margin-bottom: $space * 6;
+  padding: ($space * 4) ($space * 5);
+  border: 1px solid var(--lp-line);
+  border-radius: $radius;
+
+  ol {
+    display: grid;
+    gap: $space * 1.5;
+    max-height: 18rem;
+    overflow-y: auto;
+  }
+}
+
+.lp-event {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: $space * 2;
+  font-size: 0.85rem;
+
+  time {
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    color: var(--lp-muted);
+  }
+
+  .lp-hint {
+    flex-basis: 100%;
+    padding-left: $space * 4;
+    font-size: 0.75rem;
+  }
+}
+
+.lp-event__change {
+  font-weight: 600;
+}

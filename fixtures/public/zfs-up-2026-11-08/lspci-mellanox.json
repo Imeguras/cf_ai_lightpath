@@ -1,0 +1,16 @@
+{
+  "id": "lspci-mellanox",
+  "argv": [
+    "lspci",
+    "-nn",
+    "-d",
+    "15b3:"
+  ],
+  "started_at": "2026-11-08T18:42:48.57663267Z",
+  "duration_ms": 213,
+  "exit_code": 0,
+  "stdout": "11:00.0 Network controller [0280]: Mellanox Technologies MT27520 Family [ConnectX-3 Pro] [15b3:1007]\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

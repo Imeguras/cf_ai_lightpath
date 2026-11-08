@@ -1,0 +1,14 @@
+{
+  "id": "ipmi-sdr",
+  "argv": [
+    "ipmitool",
+    "sdr"
+  ],
+  "started_at": "2026-11-08T18:42:49.825765995Z",
+  "duration_ms": 216,
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "Could not open device at /dev/ipmi0 or /dev/ipmi/0 or /dev/ipmidev/0: No such file or directory\n",
+  "truncated": false,
+  "timed_out": false
+}

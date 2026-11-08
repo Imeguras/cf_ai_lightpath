@@ -97,6 +97,13 @@ ENV MIX_ENV="prod"
 # Only copy the final release from the build stage
 COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/lightpath ./
 
+# The public (scrubbed) fixtures, so the image runs the demo on its own
+# (Azure Container Apps has no volume). Build with the named context:
+#   docker build --build-context fixtures=fixtures/public lightpath
+# compose.yaml passes it, and mounts the same directory over it in dev.
+COPY --from=fixtures --chown=nobody:root . /fixtures
+ENV LIGHTPATH_FIXTURES_ROOT=/fixtures
+
 USER nobody
 
 # If using an environment that doesn't automatically reap zombie processes, it is

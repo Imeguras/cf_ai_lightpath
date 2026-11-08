@@ -7,17 +7,9 @@ import Config
 # before starting your production server.
 config :lightpath, LightpathWeb.Endpoint, cache_static_manifest: "priv/static/cache_manifest.json"
 
-# Force using SSL in production. This also sets the "strict-security-transport" header,
-# known as HSTS. If you have a health check endpoint, you may want to exclude it below.
-# Note `:force_ssl` is required to be set at compile-time.
-config :lightpath, LightpathWeb.Endpoint,
-  force_ssl: [
-    rewrite_on: [:x_forwarded_proto],
-    exclude: [
-      # paths: ["/health"],
-      hosts: ["localhost", "127.0.0.1"]
-    ]
-  ]
+# No force_ssl: HTTPS is the job of whatever is in front (Azure Container
+# Apps' ingress redirects HTTP itself; at home, the reverse proxy). Forcing
+# it here sent plain-HTTP LAN visits to https://<host>/, where nothing listens.
 
 # Do not print debug messages in production
 config :logger, level: :info

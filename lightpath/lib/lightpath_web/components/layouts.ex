@@ -31,6 +31,12 @@ defmodule LightpathWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
 
+  attr :page, :atom, default: nil, doc: "which nav entry is current: :evidence, :chat or :news"
+
+  attr :usage, :any,
+    default: nil,
+    doc: "an AsyncResult with the Worker's usage map; shown once it has loaded"
+
   slot :inner_block, required: true
 
   def app(assigns) do
@@ -42,6 +48,18 @@ defmodule LightpathWeb.Layouts do
         </span>
         Lightpath
       </a>
+      <nav class="lp-nav" aria-label="Pages">
+        <a href="/" class={@page == :evidence && "is-current"}>Evidence</a>
+        <a href="/chat" class={@page == :chat && "is-current"}>Chat</a>
+        <a href="/news" class={@page == :news && "is-current"}>Arch news</a>
+      </nav>
+      <span
+        :if={@usage && @usage.ok? && is_map(@usage.result)}
+        class="lp-usage"
+        title="A rough estimate kept by the Worker, for display only"
+      >
+        ≈ {neurons(@usage.result["neurons"])} / {neurons(@usage.result["allowance"])} neurons today (rough)
+      </span>
       <.theme_toggle />
     </header>
 
@@ -52,6 +70,17 @@ defmodule LightpathWeb.Layouts do
     <.flash_group flash={@flash} />
     """
   end
+
+  defp neurons(n) when is_number(n) do
+    n
+    |> round()
+    |> Integer.to_string()
+    |> String.reverse()
+    |> String.replace(~r/(\d{3})(?=\d)/, "\\1,")
+    |> String.reverse()
+  end
+
+  defp neurons(_), do: "?"
 
   @doc """
   Shows the flash group with standard titles and content.

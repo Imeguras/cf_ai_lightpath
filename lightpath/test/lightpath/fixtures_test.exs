@@ -131,4 +131,88 @@ defmodule Lightpath.FixturesTest do
                :not_run
     end
   end
+
+  describe "list/1" do
+    test "every set, newest first", %{tmp_dir: tmp} do
+      write_set(tmp, "old", "2026-11-04T00:00:00Z", [result("a", 0)])
+      write_set(tmp, "new", "2026-11-08T00:00:00Z", [result("a", 0)])
+      write_set(tmp, "mid", "2026-11-06T00:00:00Z", [result("a", 0)])
+      File.mkdir_p!(Path.join(tmp, "not-a-set"))
+      File.write!(Path.join(tmp, "stray.txt"), "x")
+
+      assert Enum.map(Fixtures.list(tmp), & &1.name) == ["new", "mid", "old"]
+    end
+
+    test "nothing there", %{tmp_dir: tmp} do
+      assert Fixtures.list(tmp) == []
+      assert Fixtures.list(Path.join(tmp, "missing")) == []
+    end
+  end
+
+  describe "kind/1" do
+    defp f(exit_code, fields \\ []) do
+      struct(
+        %Fixture{
+          argv: ["cmd"],
+          exit_code: exit_code,
+          stdout: "",
+          stderr: "",
+          error: "",
+          timed_out: false
+        },
+        fields
+      )
+    end
+
+    test "ok and not run follow status/1" do
+      assert Fixtures.kind(f(0)) == :ok
+      assert Fixtures.kind(f(0, stderr: "netlink error: Operation not permitted")) == :ok
+      assert Fixtures.kind(f(-1, timed_out: true)) == :not_run
+      assert Fixtures.kind(f(-1, error: "exec: not found")) == :not_run
+    end
+
+    test "missing permission" do
+      for stderr <- [
+            "dmesg: read kernel buffer failed: Operation not permitted",
+            "open /dev/x: Permission denied",
+            "you must be root to do this",
+            "ERROR: are you root?"
+          ] do
+        assert Fixtures.kind(f(1, stderr: stderr)) == :needs_privilege, stderr
+      end
+    end
+
+    test "a missing package or command is a real failure (it happens after updates)" do
+      for stderr <- [
+            "error: package 'linux-lts' was not found",
+            "bash: zpool: command not found",
+            "zfs is not installed"
+          ] do
+        assert Fixtures.kind(f(1, stderr: stderr)) == :failed, stderr
+      end
+    end
+
+    test "permission wins over other failures" do
+      assert Fixtures.kind(f(1, stderr: "Permission denied; package was not found")) ==
+               :needs_privilege
+
+      assert Fixtures.kind(f(3, argv: ["systemctl", "status"], stderr: "Permission denied")) ==
+               :needs_privilege
+    end
+
+    test "systemctl exit 3 is an inactive unit; other exits are failures" do
+      assert Fixtures.kind(f(3, argv: ["systemctl", "status", "kubelet.service"])) == :inactive
+      assert Fixtures.kind(f(1, argv: ["systemctl", "status", "x"])) == :failed
+      assert Fixtures.kind(f(3, argv: ["zpool", "status"])) == :failed
+    end
+
+    test "anything else non-zero is a failure, including a missing device" do
+      assert Fixtures.kind(
+               f(1, stderr: "Could not open device at /dev/ipmi0: No such file or directory")
+             ) ==
+               :failed
+
+      assert Fixtures.kind(f(2)) == :failed
+    end
+  end
 end

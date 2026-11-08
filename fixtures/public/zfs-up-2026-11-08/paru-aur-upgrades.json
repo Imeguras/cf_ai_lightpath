@@ -1,0 +1,14 @@
+{
+  "id": "paru-aur-upgrades",
+  "argv": [
+    "paru",
+    "-Qua"
+  ],
+  "started_at": "2026-11-08T18:42:38.840662909Z",
+  "duration_ms": 1805,
+  "exit_code": 0,
+  "stdout": "certbot-git 5.1.0.r6.gada2c547c-1 -\u003e latest-commit\npython-acme-git 1.0.6.r9.gada8c494c-1 -\u003e latest-commit\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

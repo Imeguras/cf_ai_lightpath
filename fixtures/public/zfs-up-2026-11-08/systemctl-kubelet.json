@@ -1,0 +1,16 @@
+{
+  "id": "systemctl-kubelet",
+  "argv": [
+    "systemctl",
+    "status",
+    "--no-pager",
+    "kubelet.service"
+  ],
+  "started_at": "2026-11-08T18:42:44.460850342Z",
+  "duration_ms": 193,
+  "exit_code": 3,
+  "stdout": "* kubelet.service - The Kubernetes Node Agent\n     Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled; preset: disabled)\n    Drop-In: /usr/lib/systemd/system/kubelet.service.d\n             `-10-kubeadm.conf\n     Active: activating (auto-restart) (Result: exit-code) since Sun 2026-11-08 18:38:56 UTC; 4s ago\n Invocation: dd315b6580514861802a721a7e81ef30\n       Docs: https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/\n    Process: 170504 ExecStart=/usr/bin/kubelet \"\\$KUBELET_KUBECONFIG_ARGS\" \"\\$KUBELET_CONFIG_ARGS\" \"\\$KUBELET_KUBEADM_ARGS\" \"\\$KUBELET_ARGS\" (code=exited, status=1/FAILURE)\n   Main PID: 170504 (code=exited, status=1/FAILURE)\n         IP: 0B in, 0B out\n   Mem peak: 56.6M\n        CPU: 291ms\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

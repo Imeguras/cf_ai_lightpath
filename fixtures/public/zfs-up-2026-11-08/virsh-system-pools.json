@@ -1,0 +1,19 @@
+{
+  "id": "virsh-system-pools",
+  "argv": [
+    "virsh",
+    "-r",
+    "-c",
+    "qemu:///system",
+    "pool-list",
+    "--all",
+    "--details"
+  ],
+  "started_at": "2026-11-08T18:42:50.281376928Z",
+  "duration_ms": 247,
+  "exit_code": 0,
+  "stdout": " Name      State      Autostart   Persistent   Capacity     Allocation   Available\n-------------------------------------------------------------------------------------\n default   running    yes         yes          851.84 GiB   489.35 GiB   362.49 GiB\n ISOs      inactive   yes         yes          -            -            -\n\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

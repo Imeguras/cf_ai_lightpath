@@ -1,0 +1,12 @@
+# Reports every package this transaction installs to the journal, one name
+# per line, for lightpathd (its tag: lightpath-alpm-install).
+[Trigger]
+Operation = Install
+Type = Package
+Target = *
+
+[Action]
+Description = Telling Lightpath about installed packages...
+When = PostTransaction
+Exec = /usr/bin/systemd-cat --identifier=lightpath-alpm-install --priority=info
+NeedsTargets

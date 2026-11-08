@@ -1,0 +1,37 @@
+{
+  "id": "ipmi-unavailable",
+  "title": "The BMC cannot be reached over IPMI",
+  "status": "unreviewed: first estimates by Claude on 2026-11-08, not yet reviewed by the author",
+  "trigger": {"fact": "ipmi.unreachable", "equals": true},
+  "causes": [
+    {"id": "devintf-missing", "prior": 0.25, "title": "ipmi_devintf is not loaded, so /dev/ipmi0 is never created",
+     "why": "the device node comes from ipmi_devintf; distros do not always load it automatically."},
+    {"id": "no-bmc-interface", "prior": 0.20, "title": "ipmi_si found no BMC interface (or none registered)",
+     "why": "if the system interface does not probe (BIOS/ACPI tables, KCS address), there is nothing to talk to."},
+    {"id": "permission", "prior": 0.25, "title": "/dev/ipmi0 exists but only root can open it",
+     "why": "the device is root-only by default; the probe runs unprivileged."},
+    {"id": "node-not-created", "prior": 0.10, "title": "Both modules are loaded but the device node was not created",
+     "why": "the interface registered after ipmi_devintf, or udev/devtmpfs did not create the node."},
+    {"id": "bmc-hung", "prior": 0.05, "title": "The BMC (IMM) itself is hung",
+     "why": "an IMM that stops answering makes every IPMI call fail; rare, fixed by an IMM reset."}
+  ],
+  "other_prior": 0.15,
+  "evidence": [
+    {"id": "device-missing", "title": "No IPMI device node exists",
+     "when": {"fact": "ipmi.device_missing", "equals": true},
+     "lr": {"devintf-missing": 3, "no-bmc-interface": 3, "node-not-created": 3, "permission": 0.05, "bmc-hung": 0.3},
+     "why": "a missing node rules out a permission problem and points at the driver chain."},
+    {"id": "permission-denied", "title": "Opening the IPMI device was denied",
+     "when": {"fact": "ipmi.permission_denied", "equals": true},
+     "lr": {"permission": 30},
+     "why": "the node exists; only access is the issue."},
+    {"id": "devintf-loaded", "title": "ipmi_devintf is loaded",
+     "when": {"fact": "ipmi.devintf_loaded", "equals": true},
+     "lr": {"devintf-missing": 0.05, "node-not-created": 2},
+     "why": "with the module present, a missing node needs another explanation."},
+    {"id": "si-loaded", "title": "ipmi_si is loaded",
+     "when": {"fact": "ipmi.si_loaded", "equals": true},
+     "lr": {"no-bmc-interface": 0.5, "node-not-created": 1.5},
+     "why": "the driver loaded, though it may still have found no interface."}
+  ]
+}

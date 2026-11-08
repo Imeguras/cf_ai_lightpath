@@ -1,0 +1,17 @@
+# Local development only: wrangler dev for the Worker (compose profile "dev").
+# Deploys do not use this image; they go through Terraform.
+# Node 26 is the current LTS and matches the desktop.
+FROM node:26-slim
+
+# workerd needs a CA store for outbound TLS (Workers AI); the slim image has none.
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+# Pinned to the version installed on the desktop.
+ARG WRANGLER_VERSION=4.156.0
+RUN npm install --global --no-fund --no-audit wrangler@${WRANGLER_VERSION}
+
+USER node
+WORKDIR /worker
+CMD ["wrangler", "dev", "--ip", "0.0.0.0", "--port", "8787"]

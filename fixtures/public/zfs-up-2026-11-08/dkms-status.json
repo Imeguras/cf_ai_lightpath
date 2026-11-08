@@ -1,0 +1,14 @@
+{
+  "id": "dkms-status",
+  "argv": [
+    "dkms",
+    "status"
+  ],
+  "started_at": "2026-11-08T18:42:42.385751306Z",
+  "duration_ms": 854,
+  "exit_code": 0,
+  "stdout": "zfs/2.4.4, 7.2.14-arch1-1, x86_64: installed\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

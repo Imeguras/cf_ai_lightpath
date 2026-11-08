@@ -1,0 +1,7 @@
+# Copy to terraform.tfvars (gitignored) and fill in your own values.
+bootstrap_api_token = "CHANGE-ME-not-a-real-token-xxxxxxxxxxxxxxxxxxxxxxxxxx"
+user_id             = "00000000000000000000000000000000"
+allowed_ips = [
+  "203.0.113.7/32",        # your IPv4 (documentation address here)
+  "2001:db8:1234:5678::/64", # your IPv6 /64 prefix (documentation prefix here)
+]

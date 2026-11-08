@@ -1,0 +1,16 @@
+{
+  "id": "lspci-mellanox-verbose",
+  "argv": [
+    "lspci",
+    "-vv",
+    "-d",
+    "15b3:"
+  ],
+  "started_at": "2026-11-08T18:42:48.790348106Z",
+  "duration_ms": 220,
+  "exit_code": 0,
+  "stdout": "11:00.0 Network controller: Mellanox Technologies MT27520 Family [ConnectX-3 Pro]\n\tSubsystem: Mellanox Technologies Device 0003\n\tPhysical Slot: 9\n\tControl: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr+ Stepping- SERR+ FastB2B- DisINTx+\n\tStatus: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast \u003eTAbort- \u003cTAbort- \u003cMAbort- \u003eSERR- \u003cPERR- INTx-\n\tLatency: 0, Cache Line Size: 64 bytes\n\tInterrupts: pin B disabled, MSI(X) routed to IRQ 263-390\n\tNUMA node: 0\n\tIOMMU group: 72\n\tRegion 0: Memory at d9700000 (64-bit, non-prefetchable) [size=1M]\n\tRegion 2: Memory at d9800000 (64-bit, prefetchable) [size=8M]\n\tExpansion ROM at \u003cignored\u003e [disabled]\n\tCapabilities: \u003caccess denied\u003e\n\tKernel driver in use: mlx4_core\n\tKernel modules: mlx4_core\n\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

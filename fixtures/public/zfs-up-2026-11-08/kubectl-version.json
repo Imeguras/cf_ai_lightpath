@@ -1,0 +1,17 @@
+{
+  "id": "kubectl-version",
+  "argv": [
+    "kubectl",
+    "version",
+    "--client",
+    "-o",
+    "json"
+  ],
+  "started_at": "2026-11-08T18:42:50.99012356Z",
+  "duration_ms": 482,
+  "exit_code": 0,
+  "stdout": "{\n  \"clientVersion\": {\n    \"major\": \"1\",\n    \"minor\": \"37\",\n    \"gitVersion\": \"v1.37.2\",\n    \"gitCommit\": \"c50e5395f1ae2d4a2c05f28fdcc38c0916cc1a32\",\n    \"gitTreeState\": \"archive\",\n    \"buildDate\": \"2026-10-28T09:22:55Z\",\n    \"goVersion\": \"go1.27.3-X:nodwarf5\",\n    \"compiler\": \"gc\",\n    \"platform\": \"linux/amd64\"\n  },\n  \"kustomizeVersion\": \"v5.8.1\"\n}\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

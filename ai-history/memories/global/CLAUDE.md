@@ -30,6 +30,10 @@ Assume this machine unless I say otherwise. It is **Arch Linux** (pacman, AUR, A
   - Seagate 1 TB (SATA HDD, 2.5")
 - Kernel: `linux` (the stock Arch kernel).
 
+## Homelab server
+The details of my IBM x3850 X6 homelab (SSH access, its stack and known issues) are in @homelab.md
+[REDACTED: homelab.md itself is not published; it holds the server's addresses, hostname, domain and storage names.]
+
 # Rules
 ## Full disk
 - If a command fails because a disk or partition is out of space ("No space left on device", ENOSPC, etc.), tell me in ALL CAPS, for example: "YOUR DISK SEEMS FULL PLEASE FREE UP SOME SPACE". Name the disk or mount if known.

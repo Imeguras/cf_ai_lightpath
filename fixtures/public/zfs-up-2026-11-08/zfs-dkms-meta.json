@@ -1,0 +1,22 @@
+{
+  "id": "zfs-dkms-meta",
+  "argv": [
+    "find",
+    "/usr/src",
+    "-maxdepth",
+    "2",
+    "-path",
+    "/usr/src/zfs-*/META",
+    "-exec",
+    "cat",
+    "{}",
+    "+"
+  ],
+  "started_at": "2026-11-08T18:42:42.214123583Z",
+  "duration_ms": 171,
+  "exit_code": 0,
+  "stdout": "Meta:          1\nName:          zfs\nBranch:        1.0\nVersion:       2.4.4\nRelease:       1\nRelease-Tags:  relext\nLicense:       CDDL\nAuthor:        OpenZFS\nLinux-Maximum: 7.2\nLinux-Minimum: 4.18\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

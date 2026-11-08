@@ -132,6 +132,29 @@ defmodule Lightpath.Fixtures do
   end
 
   @doc """
+  Every set under `root` (one per subdirectory with a readable manifest),
+  newest `created_at` first. `[]` when there is none, including when `root`
+  does not exist.
+  """
+  @spec list(Path.t()) :: [Set.t()]
+  def list(root) do
+    case File.ls(root) do
+      {:ok, names} ->
+        for(
+          name <- names,
+          dir = Path.join(root, name),
+          File.dir?(dir),
+          {:ok, set} <- [load(dir)],
+          do: set
+        )
+        |> Enum.sort_by(& &1.created_at, :desc)
+
+      {:error, _} ->
+        []
+    end
+  end
+
+  @doc """
   Finds the newest set under `root`: the subdirectory whose manifest has the
   latest `created_at`. Subdirectories without a readable manifest are
   ignored.
@@ -141,22 +164,9 @@ defmodule Lightpath.Fixtures do
   """
   @spec latest(Path.t()) :: {:ok, Set.t()} | {:error, :no_sets}
   def latest(root) do
-    sets =
-      case File.ls(root) do
-        {:ok, names} ->
-          for name <- names,
-              dir = Path.join(root, name),
-              File.dir?(dir),
-              {:ok, set} <- [load(dir)],
-              do: set
-
-        {:error, _} ->
-          []
-      end
-
-    case sets do
+    case list(root) do
       [] -> {:error, :no_sets}
-      sets -> {:ok, Enum.max_by(sets, & &1.created_at)}
+      [newest | _] -> {:ok, newest}
     end
   end
 
@@ -173,4 +183,41 @@ defmodule Lightpath.Fixtures do
   def status(%Fixture{error: error}) when is_binary(error) and error != "", do: :not_run
   def status(%Fixture{exit_code: 0}), do: :ok
   def status(%Fixture{}), do: :failed
+
+  @doc """
+  Refines `status/1` for display, saying why a command did not succeed:
+
+    * `:ok` and `:not_run` - as `status/1`
+    * `:needs_privilege` - it failed and its stderr or error says it lacked
+      permission ("Operation not permitted", "Permission denied", "must be
+      root", ...): the probe runs unprivileged, so this is expected and the
+      only failure shown as ignorable
+    * `:inactive` - `systemctl` exited 3: a unit is not active (often the
+      evidence itself)
+    * `:failed` - any other non-zero exit, including a missing package or
+      command (that happens after updates, so it counts)
+
+  Permission wins when several apply.
+  """
+  @spec kind(Fixture.t()) :: :ok | :not_run | :needs_privilege | :inactive | :failed
+  def kind(%Fixture{} = f) do
+    text = f.stderr <> "\n" <> f.error
+
+    case status(f) do
+      :failed ->
+        cond do
+          text =~ ~r/operation not permitted|permission denied|must be root|are you root/i ->
+            :needs_privilege
+
+          match?(["systemctl" | _], f.argv) and f.exit_code == 3 ->
+            :inactive
+
+          true ->
+            :failed
+        end
+
+      other ->
+        other
+    end
+  end
 end

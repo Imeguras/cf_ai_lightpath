@@ -1,11 +1,11 @@
 // The evidence page.
 @use "tokens" as *;
 
-// One rule per status, generated: sets --lp-status for whatever uses it.
-@each $s in $statuses {
-  .lp-status--#{$s} {
-    --lp-status: var(--lp-#{$s});
-    --lp-status-tint: var(--lp-#{$s}-tint);
+// One rule per kind, generated: sets --lp-status for whatever uses it.
+@each $kind, $colour in $kinds {
+  .lp-kind--#{$kind} {
+    --lp-status: var(--lp-#{$colour});
+    --lp-status-tint: var(--lp-#{$colour}-tint);
   }
 }
 
@@ -178,5 +178,56 @@
   h1 {
     font-size: 1.6rem;
     font-weight: 700;
+  }
+}
+
+// Explain: the button and the AI's answer, marked as such.
+.lp-explain {
+  display: grid;
+  gap: $space * 3;
+  justify-items: start;
+}
+
+.lp-button {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: ($space * 1.5) ($space * 4);
+  border-radius: $radius;
+  border: 1px solid var(--lp-accent);
+  color: var(--lp-accent);
+  background: transparent;
+  cursor: pointer;
+
+  &:hover:not(:disabled),
+  &:focus-visible {
+    background: var(--lp-accent);
+    color: var(--lp-paper);
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+}
+
+.lp-ai {
+  display: grid;
+  gap: $space * 2;
+  width: 100%;
+  padding: ($space * 3) ($space * 4);
+  border-radius: $radius;
+  border-left: 3px solid var(--lp-accent);
+  background: var(--lp-surface);
+
+  &__label {
+    font-family: $font-mono;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--lp-muted);
+  }
+  &__text {
+    white-space: pre-wrap;
+    line-height: 1.55;
   }
 }

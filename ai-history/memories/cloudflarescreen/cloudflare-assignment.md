@@ -1,6 +1,6 @@
 ---
 name: cloudflare-assignment
-description: "~/cloudflarescreen is João's Cloudflare SRE Core (Lisbon) fast-track AI app; prompt history lives in ai-history/, redacted for public posting"
+description: "~/cloudflarescreen is the user's Cloudflare SRE Core (Lisbon) fast-track AI app; prompt history lives in ai-history/, redacted for public posting"
 metadata:
   node_type: memory
   type: project

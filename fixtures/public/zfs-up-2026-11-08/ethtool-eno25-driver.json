@@ -1,0 +1,15 @@
+{
+  "id": "ethtool-eno25-driver",
+  "argv": [
+    "ethtool",
+    "-i",
+    "eno25"
+  ],
+  "started_at": "2026-11-08T18:42:47.712950446Z",
+  "duration_ms": 174,
+  "exit_code": 0,
+  "stdout": "driver: igb\nversion: 7.2.14-arch1-1\nfirmware-version: 1.63, 0x80000dbd\nexpansion-rom-version: \nbus-info: 0000:01:00.1\nsupports-statistics: yes\nsupports-test: yes\nsupports-eeprom-access: yes\nsupports-register-dump: yes\nsupports-priv-flags: yes\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

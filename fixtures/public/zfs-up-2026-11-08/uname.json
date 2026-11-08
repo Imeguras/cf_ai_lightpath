@@ -1,0 +1,14 @@
+{
+  "id": "uname",
+  "argv": [
+    "uname",
+    "-a"
+  ],
+  "started_at": "2026-11-08T18:42:36.244642371Z",
+  "duration_ms": 175,
+  "exit_code": 0,
+  "stdout": "Linux labhost 7.2.14-arch1-1 #1 SMP PREEMPT_DYNAMIC Fri, 30 Oct 2026 14:32:40 +0000 x86_64 GNU/Linux\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

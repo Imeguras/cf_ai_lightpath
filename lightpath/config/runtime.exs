@@ -23,6 +23,23 @@ end
 config :lightpath, LightpathWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+# Base URL of the Lightpath Worker (worker/). Without it, the Explain button
+# is hidden.
+if worker_url = System.get_env("LIGHTPATH_WORKER_URL") do
+  config :lightpath, :worker_url, worker_url
+end
+
+# Shared with the Worker: signs the JWT on every request (Lightpath.Jwt).
+if secret = System.get_env("LIGHTPATH_JWT_SECRET") do
+  config :lightpath, :jwt_secret, secret
+end
+
+# The live probe daemon's control socket (phase 7); without it there is no
+# "Re-probe now" and no event timeline.
+if socket = System.get_env("LIGHTPATH_PROBE_SOCKET") do
+  config :lightpath, :probe_socket, socket
+end
+
 if root = System.get_env("LIGHTPATH_FIXTURES_ROOT") do
   config :lightpath, :fixtures_root, root
 end

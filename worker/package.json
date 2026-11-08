@@ -1,0 +1,6 @@
+{
+  "name": "lightpath-worker",
+  "private": true,
+  "type": "module",
+  "description": "No dependencies: wrangler bundles src/ for dev, Node's built-in runner tests it (make test-worker)."
+}

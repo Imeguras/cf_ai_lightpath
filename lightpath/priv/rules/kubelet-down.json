@@ -1,0 +1,41 @@
+{
+  "id": "kubelet-down",
+  "title": "kubelet is not running",
+  "status": "unreviewed: first estimates by Claude on 2026-11-08, not yet reviewed by the author",
+  "trigger": {"fact": "k8s.kubelet_failing", "equals": true},
+  "causes": [
+    {"id": "not-initialized", "prior": 0.30, "title": "The node was never set up (kubeadm init/join not run)",
+     "why": "kubeadm's packages enable kubelet, which restart-loops until kubeadm writes its config; very common on a fresh install."},
+    {"id": "swap-on", "prior": 0.15, "title": "Swap is on and kubelet refuses it",
+     "why": "kubelet fails by default when swap is enabled unless failSwapOn is false."},
+    {"id": "runtime-down", "prior": 0.15, "title": "The container runtime (containerd) is down or unreachable",
+     "why": "kubelet needs a CRI socket; a stopped or misconfigured containerd keeps it failing."},
+    {"id": "cgroup-mismatch", "prior": 0.10, "title": "kubelet and the runtime disagree on the cgroup driver",
+     "why": "systemd vs cgroupfs mismatch is a classic kubeadm setup error."},
+    {"id": "config-broken", "prior": 0.15, "title": "kubelet's config or certificates are broken or out of date",
+     "why": "after upgrades or a half-finished reset, config.yaml or the kubeconfig can be invalid."}
+  ],
+  "other_prior": 0.15,
+  "evidence": [
+    {"id": "config-missing", "title": "kubelet cannot find /var/lib/kubelet/config.yaml",
+     "when": {"fact": "k8s.kubelet_config_missing", "equals": true},
+     "lr": {"not-initialized": 20, "config-broken": 3, "swap-on": 0.2, "runtime-down": 0.2, "cgroup-mismatch": 0.2},
+     "why": "kubeadm init/join writes this file; it is missing almost only when they never ran (or after kubeadm reset)."},
+    {"id": "flags-unset", "title": "KUBELET_KUBEADM_ARGS is unset",
+     "when": {"fact": "k8s.kubeadm_flags_unset", "equals": true},
+     "lr": {"not-initialized": 4, "config-broken": 1.5},
+     "why": "kubeadm writes kubeadm-flags.env at init/join; unset means it has not."},
+    {"id": "swap-error", "title": "kubelet says swap is not supported",
+     "when": {"fact": "k8s.swap_error", "equals": true},
+     "lr": {"swap-on": 30},
+     "why": "kubelet names swap explicitly when that is what stops it."},
+    {"id": "runtime-error", "title": "kubelet cannot reach the container runtime",
+     "when": {"fact": "k8s.runtime_error", "equals": true},
+     "lr": {"runtime-down": 20},
+     "why": "CRI connection errors point straight at containerd."},
+    {"id": "cgroup-error", "title": "kubelet reports a cgroup driver problem",
+     "when": {"fact": "k8s.cgroup_error", "equals": true},
+     "lr": {"cgroup-mismatch": 25},
+     "why": "kubelet prints the two drivers when they differ."}
+  ]
+}

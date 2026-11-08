@@ -1,0 +1,16 @@
+{
+  "id": "docker-security",
+  "argv": [
+    "docker",
+    "info",
+    "--format",
+    "{{json .SecurityOptions}}"
+  ],
+  "started_at": "2026-11-08T18:42:51.711506583Z",
+  "duration_ms": 339,
+  "exit_code": 0,
+  "stdout": "[\"name=seccomp,profile=builtin\",\"name=cgroupns\"]\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

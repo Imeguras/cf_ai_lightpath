@@ -1,0 +1,76 @@
+{
+  "id": "zfs-pools-unavailable",
+  "title": "ZFS pools are unavailable",
+  "status": "unreviewed: first estimates by Claude on 2026-11-04, not yet reviewed by the author",
+  "sources": [],
+  "trigger": {"fact": "zfs.pools_unavailable", "equals": true},
+
+  "causes": [
+    {"id": "kernel-unsupported", "prior": 0.25,
+     "title": "Running kernel is newer than zfs-dkms supports",
+     "why": "On Arch the kernel moves faster than OpenZFS; after a kernel upgrade this is the classic way the module goes missing."},
+    {"id": "headers-mismatch", "prior": 0.15,
+     "title": "Kernel headers missing or not matching the running kernel",
+     "why": "dkms builds against linux-headers; a partial upgrade or a missing headers package stops the build."},
+    {"id": "dkms-build-failed", "prior": 0.15,
+     "title": "dkms build failed for another reason",
+     "why": "Compiler or toolchain changes, a broken zfs-dkms package, a full /var."},
+    {"id": "import-disabled", "prior": 0.15,
+     "title": "Pool import units disabled or not run",
+     "why": "The module is fine but zfs-import-cache/zfs-import-scan never ran, so no pool is imported."},
+    {"id": "pool-fault", "prior": 0.10,
+     "title": "Pool or disk fault",
+     "why": "A faulted vdev or a dead disk; rarer than the packaging causes on a box that was simply switched off."}
+  ],
+  "other_prior": 0.20,
+
+  "evidence": [
+    {"id": "kernel-above-max",
+     "title": "Running kernel is above zfs-dkms Linux-Maximum",
+     "when": {"fact": "zfs.kernel_above_max", "equals": true},
+     "lr": {"kernel-unsupported": 20},
+     "why": "The META file says this kernel is outside the supported range: very likely under kernel-unsupported, rare otherwise (only if META were wrong)."},
+
+    {"id": "headers-match",
+     "title": "linux-headers matches the running kernel",
+     "when": {"fact": "zfs.headers_match_kernel", "equals": true},
+     "lr": {"headers-mismatch": 0.05},
+     "why": "Matching headers make a headers problem very unlikely."},
+
+    {"id": "headers-mismatch",
+     "title": "linux-headers does not match the running kernel",
+     "when": {"fact": "zfs.headers_match_kernel", "equals": false},
+     "lr": {"headers-mismatch": 15},
+     "why": "Mismatched headers are exactly what this cause predicts."},
+
+    {"id": "module-missing",
+     "title": "No zfs module exists for the running kernel",
+     "when": {"fact": "zfs.module_present", "equals": false},
+     "lr": {"import-disabled": 0.1, "pool-fault": 0.1, "other": 0.5},
+     "why": "A missing module points at the build, not at import units or the pool, which need the module to even be checked."},
+
+    {"id": "dkms-not-built",
+     "title": "dkms has zfs registered but not built",
+     "when": {"fact": "zfs.dkms_built", "equals": false},
+     "lr": {"kernel-unsupported": 3, "headers-mismatch": 3, "dkms-build-failed": 3, "import-disabled": 0.2, "pool-fault": 0.2},
+     "why": "\"added\" without \"installed\" means the build never succeeded: favours the three build causes equally."},
+
+    {"id": "import-enabled",
+     "title": "zfs-import-cache.service is enabled",
+     "when": {"fact": "zfs.import_enabled", "equals": true},
+     "lr": {"import-disabled": 0.2},
+     "why": "Enabled import units make the disabled-import cause unlikely (they could still fail to run)."},
+
+    {"id": "newer-zfs-available",
+     "title": "The AUR has a newer zfs-dkms",
+     "when": {"fact": "zfs.newer_available", "equals": true},
+     "lr": {"kernel-unsupported": 1.5},
+     "why": "Weak: newer releases usually extend kernel support, which fits a kernel that outran the installed one."},
+
+    {"id": "libvirt-pool-inactive",
+     "title": "A libvirt storage pool is inactive",
+     "when": {"fact": "libvirt.pool_inactive", "equals": true},
+     "lr": {},
+     "why": "A downstream symptom: it confirms ZFS is unavailable but does not tell causes apart, so it moves nothing."}
+  ]
+}

@@ -32,3 +32,27 @@ tags
 
 # OS
 .DS_Store
+
+# wrangler dev scratch space
+worker/.wrangler/
+# esbuild output (make bundle), deployed by Terraform.
+worker/dist/
+
+# Terraform: private values, state (holds token values) and provider cache.
+# .terraform.lock.hcl stays tracked.
+deploy/terraform/terraform.tfvars
+deploy/terraform/*.tfstate
+deploy/terraform/*.tfstate.*
+deploy/terraform/.terraform/
+deploy/terraform/worker/*.tfstate
+deploy/terraform/worker/*.tfstate.*
+deploy/terraform/worker/.terraform/
+deploy/terraform/azure/terraform.tfvars
+deploy/terraform/azure/*.tfstate
+deploy/terraform/azure/*.tfstate.*
+deploy/terraform/azure/.terraform/
+
+# makepkg output (deploy/arch).
+deploy/arch/src/
+deploy/arch/pkg/
+deploy/arch/*.pkg.tar.*

@@ -1,0 +1,391 @@
+{
+  "target": "labuser@192.0.2.1",
+  "created_at": "2026-11-08T18:42:36.076450186Z",
+  "entries": [
+    {
+      "id": "os-release",
+      "file": "os-release.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "uname",
+      "file": "uname.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "uptime",
+      "file": "uptime.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "modules-dirs",
+      "file": "modules-dirs.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "lsmod",
+      "file": "lsmod.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "lscpu",
+      "file": "lscpu.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "free",
+      "file": "free.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "pacman-q",
+      "file": "pacman-q.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "pacman-kernel-zfs",
+      "file": "pacman-kernel-zfs.json",
+      "exit_code": 1,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "pacman-qi-zfs-dkms",
+      "file": "pacman-qi-zfs-dkms.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "pacman-qi-zfs-utils",
+      "file": "pacman-qi-zfs-utils.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "pacman-foreign",
+      "file": "pacman-foreign.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "paru-version",
+      "file": "paru-version.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "paru-aur-upgrades",
+      "file": "paru-aur-upgrades.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "paru-aur-info-zfs",
+      "file": "paru-aur-info-zfs.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "paru-stats",
+      "file": "paru-stats.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "zfs-dkms-meta",
+      "file": "zfs-dkms-meta.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "dkms-status",
+      "file": "dkms-status.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "modinfo-zfs",
+      "file": "modinfo-zfs.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "zpool-status",
+      "file": "zpool-status.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "zpool-list",
+      "file": "zpool-list.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "zfs-list",
+      "file": "zfs-list.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "systemctl-failed",
+      "file": "systemctl-failed.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "systemctl-zfs",
+      "file": "systemctl-zfs.json",
+      "exit_code": 3,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "systemctl-kubelet",
+      "file": "systemctl-kubelet.json",
+      "exit_code": 3,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "journal-warnings",
+      "file": "journal-warnings.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "journal-kernel",
+      "file": "journal-kernel.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "journal-zfs",
+      "file": "journal-zfs.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "journal-kubelet",
+      "file": "journal-kubelet.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "dmesg",
+      "file": "dmesg.json",
+      "exit_code": 1,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "lsblk",
+      "file": "lsblk.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "df",
+      "file": "df.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "smartctl-scan",
+      "file": "smartctl-scan.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ip-link",
+      "file": "ip-link.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ip-addr",
+      "file": "ip-addr.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ethtool-eno25",
+      "file": "ethtool-eno25.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ethtool-eno25-driver",
+      "file": "ethtool-eno25-driver.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ethtool-ens9d1",
+      "file": "ethtool-ens9d1.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ethtool-ens9d1-driver",
+      "file": "ethtool-ens9d1-driver.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ethtool-ens9d1-stats",
+      "file": "ethtool-ens9d1-stats.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ethtool-ens9d1-module",
+      "file": "ethtool-ens9d1-module.json",
+      "exit_code": 1,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "lspci-mellanox",
+      "file": "lspci-mellanox.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "lspci-mellanox-verbose",
+      "file": "lspci-mellanox-verbose.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ib-sysfs",
+      "file": "ib-sysfs.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ibstat",
+      "file": "ibstat.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "sensors",
+      "file": "sensors.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "ipmi-sdr",
+      "file": "ipmi-sdr.json",
+      "exit_code": 1,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "virsh-system-list",
+      "file": "virsh-system-list.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "virsh-system-pools",
+      "file": "virsh-system-pools.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "virsh-system-nets",
+      "file": "virsh-system-nets.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "virsh-session-list",
+      "file": "virsh-session-list.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "kubectl-version",
+      "file": "kubectl-version.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "docker-ps",
+      "file": "docker-ps.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "docker-security",
+      "file": "docker-security.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "id": "pminfo",
+      "file": "pminfo.json",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    }
+  ]
+}

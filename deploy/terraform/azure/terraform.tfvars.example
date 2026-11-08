@@ -1,0 +1,4 @@
+# Copy to terraform.tfvars (gitignored). Fake values below.
+subscription_id = "00000000-0000-0000-0000-000000000000"
+image           = "ghcr.io/example/cf_ai_lightpath:0000000"
+budget_email    = "you@example.invalid"

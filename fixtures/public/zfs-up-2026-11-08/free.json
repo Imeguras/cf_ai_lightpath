@@ -1,0 +1,14 @@
+{
+  "id": "free",
+  "argv": [
+    "free",
+    "-b"
+  ],
+  "started_at": "2026-11-08T18:42:37.210558611Z",
+  "duration_ms": 172,
+  "exit_code": 0,
+  "stdout": "               total        used        free      shared  buff/cache   available\nMem:     134858776576 102682873856 18114748416    50036736 15371698176 32175902720\nSwap:    68719472640  6902374400 61817098240\n",
+  "stderr": "",
+  "truncated": false,
+  "timed_out": false
+}

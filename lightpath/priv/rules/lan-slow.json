@@ -1,0 +1,27 @@
+{
+  "id": "lan-slow",
+  "title": "The LAN port (eno25) negotiated below its speed",
+  "status": "unreviewed: first estimates by Claude on 2026-11-08, not yet reviewed by the author",
+  "trigger": {"fact": "net.lan_below_advertised", "equals": true},
+  "causes": [
+    {"id": "cable", "prior": 0.40, "title": "Cable: damaged, too long, or only two pairs wired",
+     "why": "gigabit needs all four pairs; a cable with two working pairs falls back to 100 Mb/s with no error."},
+    {"id": "partner-port", "prior": 0.30, "title": "The switch/router port only does 100 Mb/s",
+     "why": "cheap or ISP-supplied equipment often has Fast Ethernet ports."},
+    {"id": "partner-forced", "prior": 0.05, "title": "The other end has its speed forced",
+     "why": "a forced partner makes autonegotiation fall back, usually to half duplex."},
+    {"id": "nic-port", "prior": 0.05, "title": "This NIC port or its PHY is faulty",
+     "why": "rare; swapping to another I350 port tells."}
+  ],
+  "other_prior": 0.20,
+  "evidence": [
+    {"id": "full-duplex", "title": "Full duplex was negotiated",
+     "when": {"fact": "net.lan_duplex_full", "equals": true},
+     "lr": {"partner-forced": 0.2},
+     "why": "a forced partner usually ends in a duplex mismatch (half duplex here)."},
+    {"id": "autoneg-on", "title": "Auto-negotiation is on here",
+     "when": {"fact": "net.lan_autoneg", "equals": true},
+     "lr": {"cable": 1.2, "partner-port": 1.2},
+     "why": "both ends negotiated, which fits a cable or a slower partner."}
+  ]
+}
