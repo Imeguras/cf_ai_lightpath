@@ -30,6 +30,17 @@ locals {
   crons = ["0 6 * * *"]
 
   gateway = "lightpath"
+
+  # The Durable Object migration this config describes, and the one the
+  # deployed script is at ("" before the first deploy).
+  migration_tag = "v1"
+  deployed_tag = try(one([
+    for s in data.cloudflare_workers_scripts.all.result : s.migration_tag if s.id == local.name
+  ]), "")
+}
+
+data "cloudflare_workers_scripts" "all" {
+  account_id = var.account_id
 }
 
 resource "cloudflare_workers_script" "lightpath" {
@@ -60,10 +71,18 @@ resource "cloudflare_workers_script" "lightpath" {
     ],
   )
 
-  # First deploy creates every class. A later class change adds a migration
-  # step here (new_tag "v2", ...) and to wrangler.tf.
-  migrations = {
-    new_tag            = "v1"
+  # Durable Object migrations are stateful on Cloudflare's side: the first
+  # deploy goes from no tag to "v1" and creates the classes; every later
+  # deploy must say it starts from "v1". The deployed tag is read from the
+  # account (data source below), so both cases need no hand edits. A later
+  # class change adds tag "v2" here and in wrangler.tf.
+  migrations = local.deployed_tag == local.migration_tag ? {
+    old_tag            = local.migration_tag
+    new_tag            = local.migration_tag
+    new_sqlite_classes = null
+    } : {
+    old_tag            = null
+    new_tag            = local.migration_tag
     new_sqlite_classes = values(local.durable_objects)
   }
 

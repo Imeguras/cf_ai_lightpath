@@ -33,9 +33,15 @@ ProtectHome=yes
 PrivateTmp=yes
 PrivateDevices=no
 DeviceAllow=/dev/ipmi0 r
+# zpool and zfs talk to the module through /dev/zfs (world read-write on
+# the host); without it every ZFS probe fails and reads as "pools down".
+DeviceAllow=/dev/zfs rw
 DevicePolicy=closed
 ProtectKernelTunables=yes
-ProtectKernelModules=yes
+# Must stay off: it hides /usr/lib/modules, which modinfo and the module
+# directory probes read. Loading modules is impossible anyway (no
+# capabilities at all).
+ProtectKernelModules=no
 ProtectKernelLogs=yes
 ProtectControlGroups=yes
 ProtectClock=yes

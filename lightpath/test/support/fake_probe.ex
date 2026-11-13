@@ -32,7 +32,8 @@ defmodule Lightpath.FakeProbe do
         "kind" => "unit",
         "subject" => "kubelet.service",
         "change" => "failed",
-        "message" => "kubelet.service: Failed with result 'exit-code'."
+        "message" => "kubelet.service: Failed with result 'exit-code'.",
+        "repeats" => 190
       }
     ]
 

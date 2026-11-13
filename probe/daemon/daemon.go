@@ -50,7 +50,11 @@ type Config struct {
 	Keep time.Duration
 	// Quiet and MaxWait configure the event debouncer (see correlate).
 	Quiet, MaxWait time.Duration
-	Now            func() time.Time
+	// Suppress: an event identical (Kind, Subject, Change) to one recorded
+	// less than this long ago is only counted (see Observe). Zero records
+	// everything.
+	Suppress time.Duration
+	Now      func() time.Time
 }
 
 // ErrBusy is returned when a probe run is already in progress.
@@ -66,6 +70,19 @@ type Daemon struct {
 	debounce  correlate.Debouncer
 	lastSet   string
 	prunedDay string
+	recent    map[eventKey]*seen
+}
+
+type eventKey struct {
+	kind            events.Kind
+	subject, change string
+}
+
+// seen: when an event was last recorded, and how many identical ones were
+// suppressed since.
+type seen struct {
+	at         time.Time
+	suppressed int
 }
 
 // New checks cfg (StateDir, Scrubber, Runner and Now set; Commands valid
@@ -165,7 +182,27 @@ func (d *Daemon) Probe(ctx context.Context, ids []string) (string, error) {
 
 // Observe records e: its Message passes through the Scrubber, it is
 // appended to the timeline, and the probes the Rules name for it are queued.
+// A flapping unit would otherwise flood both (a restart loop is hundreds of
+// events an hour): an event identical in Kind, Subject and Change to one
+// recorded less than Suppress ago is only counted, and the next identical
+// event that is recorded carries that count in Repeats.
 func (d *Daemon) Observe(e events.Event) error {
+	key := eventKey{e.Kind, e.Subject, e.Change}
+	d.mu.Lock()
+	if d.recent == nil {
+		d.recent = map[eventKey]*seen{}
+	}
+	if s, ok := d.recent[key]; ok && d.cfg.Suppress > 0 && e.Time.Sub(s.at) < d.cfg.Suppress {
+		s.suppressed++
+		d.mu.Unlock()
+		return nil
+	}
+	if s, ok := d.recent[key]; ok {
+		e.Repeats = s.suppressed
+	}
+	d.recent[key] = &seen{at: e.Time}
+	d.mu.Unlock()
+
 	e.Message = d.cfg.Scrubber.Text(e.Message)
 	e.Subject = d.cfg.Scrubber.Text(e.Subject)
 	if err := store.Append(filepath.Join(d.cfg.StateDir, "events"), e); err != nil {

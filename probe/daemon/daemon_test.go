@@ -74,7 +74,7 @@ func setup(t *testing.T) (*daemon.Daemon, *fakeRunner, *clock, string) {
 	d, err := daemon.New(daemon.Config{
 		StateDir: dir, Scrubber: s, Commands: cmds, Rules: rules, Runner: r,
 		Timeout: time.Second, Target: "hlprobe@realhost", Keep: 90 * 24 * time.Hour,
-		Quiet: 30 * time.Second, MaxWait: 5 * time.Minute, Now: c.now,
+		Quiet: 30 * time.Second, MaxWait: 5 * time.Minute, Suppress: time.Hour, Now: c.now,
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -288,3 +288,38 @@ func TestNewChecksConfig(t *testing.T) {
 }
 
 func regexpMust(p string) *regexp.Regexp { return regexp.MustCompile(p) }
+
+func TestFlappingIsSuppressedAndCounted(t *testing.T) {
+	d, r, c, dir := setup(t)
+	d.Probe(context.Background(), nil)
+	fail := func() events.Event {
+		return events.Event{Time: c.now(), Kind: events.Package, Subject: "linux", Change: "upgraded", Message: "linux"}
+	}
+	d.Observe(fail())
+	c.add(time.Minute)
+	d.Tick(context.Background()) // runs the first batch
+	ran := r.count("uname")
+
+	for i := 0; i < 50; i++ { // a restart loop: identical events every 10 s
+		c.add(10 * time.Second)
+		d.Observe(fail())
+	}
+	c.add(time.Minute)
+	if name, _ := d.Tick(context.Background()); name != "" || r.count("uname") != ran {
+		t.Fatalf("suppressed events re-probed: %q", name)
+	}
+	other := events.Event{Time: c.now(), Kind: events.Package, Subject: "linux", Change: "removed", Message: "linux"}
+	d.Observe(other) // a different change is not suppressed
+
+	c.add(time.Hour)
+	d.Observe(fail()) // the window has passed: recorded again, with the count
+
+	evs, _ := os.ReadFile(filepath.Join(dir, "events", "events-2026-11-08.jsonl"))
+	lines := strings.Split(strings.TrimSpace(string(evs)), "\n")
+	if len(lines) != 3 {
+		t.Fatalf("recorded %d events, want 3:\n%s", len(lines), evs)
+	}
+	if !strings.Contains(lines[2], `"repeats":50`) || strings.Contains(lines[0], "repeats") {
+		t.Fatalf("repeat count wrong:\n%s", evs)
+	}
+}

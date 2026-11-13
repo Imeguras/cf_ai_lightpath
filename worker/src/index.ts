@@ -179,10 +179,11 @@ async function instanceStatus(workflow: WorkflowBinding, url: URL): Promise<Resp
   } catch {
     return json(404, { error: "no such instance" });
   }
+  // The runtime reports a missing output or error as null (or leaves it out).
   return json(200, {
     status: status.status,
-    ...(status.output === undefined ? {} : { output: status.output }),
-    ...(status.error === undefined ? {} : { error: status.error.message }),
+    ...(status.output == null ? {} : { output: status.output }),
+    ...(status.error == null ? {} : { error: status.error.message ?? String(status.error) }),
   });
 }
 

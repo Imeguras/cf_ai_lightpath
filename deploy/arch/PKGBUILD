@@ -1,7 +1,7 @@
 # Lightpath live probe, built from this repository (no download):
 #   cd deploy/arch && makepkg -si
 pkgname=lightpathd
-pkgver=0.1.0
+pkgver=0.1.2
 pkgrel=1
 pkgdesc="Lightpath live probe: read-only, event-driven homelab evidence"
 arch=('x86_64')

@@ -56,3 +56,6 @@ deploy/terraform/azure/.terraform/
 deploy/arch/src/
 deploy/arch/pkg/
 deploy/arch/*.pkg.tar.*
+
+# make demo-gif scratch frames.
+docs/demo/frames/

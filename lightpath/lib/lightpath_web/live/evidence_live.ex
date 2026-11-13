@@ -3,11 +3,12 @@ defmodule LightpathWeb.EvidenceLive do
   The evidence page, at `/`.
 
   Shows one fixture set under the configured `:fixtures_root`: the newest by
-  default, or the one named by `?set=` (a picker lists every set, newest
-  first; an unknown name shows a notice):
+  default, or the one named by `?set=` (a dropdown, `form.lp-setpick`, lists
+  every set newest first, labelled by when it was recorded; an unknown name
+  shows a notice):
 
-    * a header with the set's name, when it was recorded and the (scrubbed)
-      target, plus how many fixtures there are of each kind
+    * a header titled with when the set was recorded (`LightpathWeb.Format`),
+      then its name and the (scrubbed) target, plus how many fixtures there are of each kind
       (`Lightpath.Fixtures.kind/1`: ok, failed, needs root, inactive, not
       run), leaving out kinds with none;
     * one entry per fixture, in manifest order, with its kind as a CSS class
@@ -40,7 +41,10 @@ defmodule LightpathWeb.EvidenceLive do
       or the failure as a notice;
     * a timeline (`.lp-timeline`) lists the last 7 days of events it
       recorded (package changes, unit failures, kernel warnings, link
-      changes), newest first, at most 50.
+      changes), newest first, at most 50, grouped by UTC day
+      (`.lp-timeline__day`), each with its time, a badge coloured by its
+      change (`.lp-badge--bad|warn|good|neutral`) and "×N" when N identical
+      events were folded into it (a flapping unit).
 
   Every `:refresh_ms` (default 15 s) the page looks for new sets: viewing
   the newest, it switches to a newer one by itself (and reloads the
@@ -55,6 +59,8 @@ defmodule LightpathWeb.EvidenceLive do
   use LightpathWeb, :live_view
 
   import LightpathWeb.Live.Helpers
+
+  alias LightpathWeb.Format
 
   alias Lightpath.{Diagnosis, Fixtures, Probe, Runbooks, Suggest}
   alias Lightpath.Diagnosis.Facts
@@ -127,6 +133,9 @@ defmodule LightpathWeb.EvidenceLive do
       _ -> {:noreply, socket}
     end
   end
+
+  def handle_event("pick_set", %{"set" => name}, socket),
+    do: {:noreply, push_patch(socket, to: ~p"/?#{[set: name]}")}
 
   def handle_event("reprobe", _params, socket) do
     if socket.assigns.probing or not socket.assigns.can_probe do
@@ -289,6 +298,13 @@ defmodule LightpathWeb.EvidenceLive do
     )
   end
 
+  # Events (newest first) grouped by UTC day, keeping that order.
+  defp by_day(events) do
+    events
+    |> Enum.chunk_by(&Format.day(&1["time"]))
+    |> Enum.map(fn [first | _] = group -> {Format.day(first["time"]), group} end)
+  end
+
   defp schedule_refresh,
     do: Process.send_after(self(), :refresh, Application.get_env(:lightpath, :refresh_ms, 15_000))
 
@@ -388,11 +404,12 @@ defmodule LightpathWeb.EvidenceLive do
         <% true -> %>
           <section class="lp-set">
             <div>
-              <p class="lp-eyebrow">Evidence set</p>
-              <h1 class="lp-set__name">{@set.name}</h1>
+              <p class="lp-eyebrow">Evidence recorded</p>
+              <h1 class="lp-set__when">
+                <time datetime={@set.created_at}>{Format.when_utc(@set.created_at)}</time>
+              </h1>
               <p class="lp-set__meta">
-                recorded <time datetime={@set.created_at}>{@set.created_at}</time>
-                on <code>{@set.target}</code>
+                <code class="lp-set__name">{@set.name}</code> on <code>{@set.target}</code>
               </p>
               <div :if={@can_probe} class="lp-reprobe">
                 <button type="button" class="lp-button" phx-click="reprobe" disabled={@probing}>
@@ -403,15 +420,14 @@ defmodule LightpathWeb.EvidenceLive do
               <p :if={@newer} class="lp-notice">
                 Newer evidence: <.link patch={~p"/?#{[set: @newer]}"}>{@newer}</.link>
               </p>
-              <nav :if={length(@sets) > 1} class="lp-sets" aria-label="Evidence sets">
-                <.link
-                  :for={s <- @sets}
-                  patch={~p"/?#{[set: s.name]}"}
-                  class={s.name == @set.name && "is-current"}
-                >
-                  {s.name}
-                </.link>
-              </nav>
+              <form :if={length(@sets) > 1} class="lp-setpick" phx-change="pick_set">
+                <label for="lp-setpick">Other evidence</label>
+                <select id="lp-setpick" name="set">
+                  <option :for={s <- @sets} value={s.name} selected={s.name == @set.name}>
+                    {Format.when_utc(s.created_at)} · {s.name}
+                  </option>
+                </select>
+              </form>
             </div>
             <ul class="lp-counts">
               <li :for={k <- @kinds} :if={Map.get(@counts, k, 0) > 0} class={kind_class(k)}>
@@ -509,15 +525,27 @@ defmodule LightpathWeb.EvidenceLive do
           <section :if={@can_probe} class="lp-timeline" aria-label="Recent events">
             <p class="lp-eyebrow">Events, last 7 days</p>
             <p :if={@events == []} class="lp-hint">Nothing recorded yet.</p>
-            <ol>
-              <li :for={e <- @events} class={"lp-event lp-event--" <> (e["kind"] || "")}>
-                <time datetime={e["time"]}>{e["time"]}</time>
-                <span class="lp-chip">{e["kind"]}</span>
-                <code>{e["subject"]}</code>
-                <span class="lp-event__change">{e["change"]}</span>
-                <span class="lp-hint">{e["message"]}</span>
-              </li>
-            </ol>
+            <div :for={{day, events} <- by_day(@events)} class="lp-timeline__group">
+              <h3 class="lp-timeline__day">{day}</h3>
+              <ol>
+                <li :for={e <- events} class={"lp-event lp-event--" <> (e["kind"] || "")}>
+                  <time datetime={e["time"]}>{Format.clock(e["time"])}</time>
+                  <span class="lp-event__kind">{e["kind"]}</span>
+                  <code class="lp-event__subject">{e["subject"]}</code>
+                  <span class={"lp-badge lp-badge--" <> Format.badge(e["change"])}>
+                    {e["change"]}
+                  </span>
+                  <span
+                    :if={(e["repeats"] || 0) > 0}
+                    class="lp-event__repeats"
+                    title="identical events folded into this one"
+                  >
+                    ×{e["repeats"]}
+                  </span>
+                  <p class="lp-event__message">{e["message"]}</p>
+                </li>
+              </ol>
+            </div>
           </section>
 
           <div class="lp-evidence">

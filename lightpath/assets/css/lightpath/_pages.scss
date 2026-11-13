@@ -27,26 +27,6 @@
   color: var(--lp-muted);
 }
 
-.lp-sets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $space * 2;
-  margin-top: $space * 2;
-  font-family: $font-mono;
-  font-size: 0.75rem;
-
-  a {
-    padding: $space ($space * 2);
-    border: 1px solid var(--lp-line);
-    border-radius: $radius;
-    color: var(--lp-muted);
-
-    &.is-current {
-      color: var(--lp-ink);
-      border-color: var(--lp-accent);
-    }
-  }
-}
 
 .lp-runbook {
   margin-top: $space * 2;
@@ -207,20 +187,62 @@
   margin-top: $space * 3;
 }
 
+.lp-set__when {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.lp-set__name {
+  font-size: 0.8rem;
+}
+
+.lp-setpick {
+  display: flex;
+  align-items: center;
+  gap: $space * 2;
+  margin-top: $space * 3;
+  font-size: 0.8rem;
+  color: var(--lp-muted);
+
+  select {
+    font: inherit;
+    font-family: $font-mono;
+    padding: $space ($space * 2);
+    border-radius: $radius;
+    border: 1px solid var(--lp-line);
+    background: var(--lp-surface);
+    color: var(--lp-ink);
+    max-width: 100%;
+  }
+}
+
 .lp-timeline {
   display: grid;
-  gap: $space * 2;
+  gap: $space * 3;
   margin-bottom: $space * 6;
   padding: ($space * 4) ($space * 5);
   border: 1px solid var(--lp-line);
   border-radius: $radius;
+  max-height: 24rem;
+  overflow-y: auto;
+}
 
-  ol {
-    display: grid;
-    gap: $space * 1.5;
-    max-height: 18rem;
-    overflow-y: auto;
-  }
+.lp-timeline__day {
+  position: sticky;
+  top: 0;
+  padding: $space 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lp-muted);
+  background: var(--lp-paper);
+}
+
+.lp-timeline__group ol {
+  display: grid;
+  gap: $space * 2;
+  border-left: 2px solid var(--lp-line);
+  padding-left: $space * 4;
 }
 
 .lp-event {
@@ -234,15 +256,56 @@
     font-family: $font-mono;
     font-size: 0.75rem;
     color: var(--lp-muted);
-  }
-
-  .lp-hint {
-    flex-basis: 100%;
-    padding-left: $space * 4;
-    font-size: 0.75rem;
+    min-width: 3rem;
   }
 }
 
-.lp-event__change {
+.lp-event__kind {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lp-muted);
+  min-width: 4.5rem;
+}
+
+.lp-event__subject {
+  font-size: 0.8rem;
+}
+
+.lp-event__message {
+  flex-basis: 100%;
+  padding-left: 3rem;
+  font-size: 0.75rem;
+  color: var(--lp-muted);
+  overflow-wrap: anywhere;
+}
+
+.lp-badge {
+  font-size: 0.7rem;
   font-weight: 600;
+  padding: 0 ($space * 2);
+  border-radius: 999px;
+  color: var(--lp-muted);
+  background: var(--lp-muted-tint);
+
+  &--bad {
+    color: var(--lp-failed);
+    background: var(--lp-failed-tint);
+  }
+
+  &--warn {
+    color: var(--lp-not-run);
+    background: var(--lp-not-run-tint);
+  }
+
+  &--good {
+    color: var(--lp-ok);
+    background: var(--lp-ok-tint);
+  }
+}
+
+.lp-event__repeats {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  color: var(--lp-not-run);
 }

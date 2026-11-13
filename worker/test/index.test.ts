@@ -209,6 +209,10 @@ test("triage: start an instance, then read its status", async () => {
   e.TRIAGE.statuses.set("triage-2", { status: "errored", error: { name: "Error", message: "4006" } });
   assert.deepEqual((await call(e, "GET", "/api/triage/status?id=triage-2")).json, { status: "errored", error: "4006" });
 
+  // The real runtime reports "no output/error yet" as null, not undefined.
+  e.TRIAGE.statuses.set("triage-1", { status: "running", output: null, error: null } as never);
+  assert.deepEqual((await call(e, "GET", "/api/triage/status?id=triage-1")).json, { status: "running" });
+
   assert.equal((await call(e, "GET", "/api/triage/status?id=nope")).status, 404);
   for (const q of ["", "?id=", "?id=a%20b", "?id=" + "x".repeat(101)]) {
     assert.equal((await call(e, "GET", "/api/triage/status" + q)).status, 400, q);

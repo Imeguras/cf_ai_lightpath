@@ -228,3 +228,27 @@ func TestFixturesMissingInputIsError(t *testing.T) {
 		t.Error("out was created despite the error")
 	}
 }
+
+func TestFixturesManifestTimeIsTheLatestRun(t *testing.T) {
+	tmp := t.TempDir()
+	early, late := filepath.Join(tmp, "early"), filepath.Join(tmp, "late")
+	t1 := time.Date(2026, 11, 8, 20, 1, 31, 0, time.UTC)
+	t2 := time.Date(2026, 11, 8, 20, 38, 11, 0, time.UTC)
+	if err := inventory.WriteFixtures(early, "a@h", t1, []inventory.Result{{ID: "x", Argv: []string{"x"}}}); err != nil {
+		t.Fatal(err)
+	}
+	if err := inventory.WriteFixtures(late, "a@h", t2, []inventory.Result{{ID: "y", Argv: []string{"y"}}}); err != nil {
+		t.Fatal(err)
+	}
+	s, _ := scrub.New(scrub.Config{})
+	out := filepath.Join(tmp, "out")
+	if err := s.Fixtures([]string{early, late}, out); err != nil {
+		t.Fatal(err)
+	}
+	b, _ := os.ReadFile(filepath.Join(out, "index.json"))
+	var m inventory.Manifest
+	json.Unmarshal(b, &m)
+	if !m.CreatedAt.Equal(t2) {
+		t.Fatalf("created_at = %v, want the latest run's %v", m.CreatedAt, t2)
+	}
+}

@@ -10,8 +10,14 @@ ranks the likely causes of a failure with plain, explainable rules, and uses
 Workers AI to explain the evidence, answer questions with memory, and digest
 Arch Linux news against the packages actually installed.
 
-Its first case is real and deliberately left unfixed: the ZFS pools are down
-because the running kernel is newer than the one `zfs-dkms` supports.
+Its first case was real: the ZFS pools went down because the running kernel
+was newer than the one `zfs-dkms` supported. The recorded evidence of that
+outage, and of the fix, is in the demo.
+
+**Live demo:** https://lightpath.ambitioussmoke-cb8aa9fd.northeurope.azurecontainerapps.io
+(it scales to zero when idle, so the first visit takes a few seconds).
+
+![Walkthrough: the recorded ZFS outage ranked by rules, its runbook, "Suggest a fix" through the triage Workflow, chat, and the Arch news digest](docs/demo.gif)
 
 ## How it maps to the assignment
 
@@ -114,7 +120,6 @@ mutants that survived pointed at real gaps, which each got a test.
 
 ## Status and known limits
 
-- The deployed URLs are added here once they are live.
 - The public demo shows recorded sets; live mode (`make home`, on the server with `lightpathd` installed) shows the daemon's sets as they appear.
 - AI answers can be wrong; the UI labels them "AI-generated · unscored · AI can make mistakes". Asked without context, both models suggested `modprobe zfs`, which cannot work here: the module is not built for the running kernel. The Bayes ranking gets this right (97.5% "kernel newer than zfs-dkms supports"), and with the ranking and runbook in the prompt the answers follow it.
 - The rule priors are first estimates and over-confident; a second mechanism (a floor for "something else", or a "check next" step) is planned.

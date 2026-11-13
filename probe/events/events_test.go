@@ -44,6 +44,15 @@ func TestUnitEvents(t *testing.T) {
 	want(t, parse(t, failed), events.Event{Time: us(1794166897782823), Kind: events.Unit, Subject: "kubelet.service", Change: "failed", Message: "kubelet.service: Failed with result 'exit-code'."})
 }
 
+func TestUnitTypesThatCount(t *testing.T) {
+	for _, unit := range []string{"a.service", "b.socket", "c.timer", "d.path", "e.target"} {
+		line := `{"__CURSOR":"c","__REALTIME_TIMESTAMP":"1","SYSLOG_IDENTIFIER":"systemd","UNIT":"` + unit + `","MESSAGE_ID":"d9b373ed55a64feb8242e02dbe79a49c","MESSAGE":"m"}`
+		if e := parse(t, line); e.Event == nil {
+			t.Errorf("%s: no event", unit)
+		}
+	}
+}
+
 func TestEveryUnitMessageID(t *testing.T) {
 	for id, change := range events.UnitMessages {
 		line := `{"__CURSOR":"c","__REALTIME_TIMESTAMP":"1","SYSLOG_IDENTIFIER":"systemd","UNIT":"x.service","MESSAGE_ID":"` + id + `","MESSAGE":"m"}`
@@ -79,6 +88,9 @@ func TestIgnoredEntriesKeepCursorAndTime(t *testing.T) {
 		`{"__CURSOR":"s=9","__REALTIME_TIMESTAMP":"5","SYSLOG_IDENTIFIER":"sshd","PRIORITY":"3","MESSAGE":"error: auth"}`,
 		`{"__CURSOR":"s=9","__REALTIME_TIMESTAMP":"5","SYSLOG_IDENTIFIER":"systemd","MESSAGE_ID":"39f53479d3a045ac8e11786248231fbf","MESSAGE":"no UNIT field"}`,
 		`{"__CURSOR":"s=9","__REALTIME_TIMESTAMP":"5","SYSLOG_IDENTIFIER":"lightpath-alpm-upgrade","MESSAGE":"   "}`,
+		`{"__CURSOR":"s=9","__REALTIME_TIMESTAMP":"5","SYSLOG_IDENTIFIER":"systemd","UNIT":"var-lib-docker-x-merged.mount","MESSAGE_ID":"7ad2d189f7e94e70a38c781354912448","MESSAGE":"Deactivated successfully."}`,
+		`{"__CURSOR":"s=9","__REALTIME_TIMESTAMP":"5","SYSLOG_IDENTIFIER":"systemd","UNIT":"session-3.scope","MESSAGE_ID":"39f53479d3a045ac8e11786248231fbf","MESSAGE":"Started"}`,
+		`{"__CURSOR":"s=9","__REALTIME_TIMESTAMP":"5","SYSLOG_IDENTIFIER":"systemd","UNIT":"user.slice","MESSAGE_ID":"39f53479d3a045ac8e11786248231fbf","MESSAGE":"Started"}`,
 	} {
 		e := parse(t, line)
 		if e.Event != nil {

@@ -14,7 +14,7 @@ export interface Namespace {
 export interface InstanceStatus {
   status: string;
   output?: unknown;
-  error?: { name: string; message: string };
+  error?: { name: string; message: string } | null;
 }
 
 /** The subset of a Workflow binding we use. */

@@ -19,7 +19,9 @@ var fixtureID = regexp.MustCompile(`^[a-z0-9][a-z0-9_-]*$`)
 // Directories are read in order; a fixture in a later directory replaces one
 // with the same ID from an earlier directory, keeping the position where the
 // ID first appeared. IDs in the Config's Drop list are left out entirely,
-// both as files and from the manifest.
+// both as files and from the manifest. The manifest's target and creation
+// time come from the last directory: the set shows the state as of the
+// latest run.
 //
 // Every string in each Result (Argv, Stdout, Stderr, Error) and the
 // manifest's Target and entry Errors pass through Text. Stdout then passes
@@ -38,17 +40,15 @@ func (s *Scrubber) Fixtures(ins []string, out string) error {
 	}
 
 	// Read everything before creating out, so a bad input leaves nothing behind.
-	var first inventory.Manifest
+	var latest inventory.Manifest
 	var order []string
 	results := map[string]inventory.Result{}
-	for i, in := range ins {
+	for _, in := range ins {
 		m, err := readJSON[inventory.Manifest](filepath.Join(in, "index.json"))
 		if err != nil {
 			return err
 		}
-		if i == 0 {
-			first = m
-		}
+		latest = m
 		for _, e := range m.Entries {
 			if !fixtureID.MatchString(e.ID) || e.ID == "index" {
 				return fmt.Errorf("%s: invalid fixture ID %q", in, e.ID)
@@ -70,7 +70,7 @@ func (s *Scrubber) Fixtures(ins []string, out string) error {
 	if err := os.Mkdir(out, 0o755); err != nil {
 		return err
 	}
-	if err := s.writeFixtures(out, first, order, results); err != nil {
+	if err := s.writeFixtures(out, latest, order, results); err != nil {
 		os.RemoveAll(out)
 		return err
 	}
@@ -81,12 +81,12 @@ func (s *Scrubber) Fixtures(ins []string, out string) error {
 	return nil
 }
 
-func (s *Scrubber) writeFixtures(out string, first inventory.Manifest, order []string, results map[string]inventory.Result) error {
+func (s *Scrubber) writeFixtures(out string, latest inventory.Manifest, order []string, results map[string]inventory.Result) error {
 	if err := os.Chmod(out, 0o755); err != nil {
 		return err
 	}
-	// The manifest keeps the first run's target (scrubbed) and creation time.
-	m := inventory.Manifest{Target: s.Text(first.Target), CreatedAt: first.CreatedAt}
+	// The manifest takes the latest run's target (scrubbed) and creation time.
+	m := inventory.Manifest{Target: s.Text(latest.Target), CreatedAt: latest.CreatedAt}
 	for _, id := range order {
 		if s.drop[id] {
 			continue

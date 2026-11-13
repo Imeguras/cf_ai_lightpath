@@ -136,7 +136,15 @@ defmodule LightpathWeb.EvidenceLiveTest do
   end
 
   describe "evidence sets" do
-    test "the newest set by default, a picker for the others", %{conn: conn, tmp_dir: tmp} do
+    test "the header names the set by when it was recorded", %{conn: conn, tmp_dir: tmp} do
+      zfs_set(tmp)
+      {:ok, _view, html} = live(conn, ~p"/")
+      head = html |> LazyHTML.from_fragment() |> LazyHTML.query(".lp-set") |> LazyHTML.text()
+      assert head =~ "4 Nov 2026, 17:32 UTC"
+      assert head =~ "zfs-down-2026-11-04"
+    end
+
+    test "the newest set by default, a dropdown for the others", %{conn: conn, tmp_dir: tmp} do
       write_set(
         tmp,
         "old-set",
@@ -158,7 +166,17 @@ defmodule LightpathWeb.EvidenceLiveTest do
              |> LazyHTML.query(".lp-set__name")
              |> LazyHTML.text() =~ "new-set"
 
-      html = view |> element(~s{.lp-sets a[href="/?set=old-set"]}) |> render_click()
+      options =
+        html
+        |> LazyHTML.from_fragment()
+        |> LazyHTML.query("form.lp-setpick option")
+        |> Enum.map(&LazyHTML.text/1)
+
+      assert length(options) == 2
+      assert Enum.at(options, 0) =~ "8 Nov 2026, 00:00 UTC", "newest first, labelled by time"
+      assert Enum.at(options, 1) =~ "4 Nov 2026"
+
+      html = view |> form("form.lp-setpick", %{"set" => "old-set"}) |> render_change()
       assert_patch(view, ~p"/?set=old-set")
 
       assert html
@@ -503,6 +521,13 @@ defmodule LightpathWeb.EvidenceLiveTest do
       assert timeline =~ "failed"
       assert timeline =~ "linux"
       assert timeline =~ "upgraded"
+      assert timeline =~ "×190", "suppressed repeats are shown"
+
+      doc = html |> LazyHTML.from_fragment()
+      assert LazyHTML.query(doc, ".lp-timeline__day") |> LazyHTML.text() =~ "8 Nov"
+      assert LazyHTML.query(doc, ".lp-timeline .lp-badge--bad") |> LazyHTML.text() =~ "failed"
+      assert LazyHTML.query(doc, ".lp-timeline .lp-badge--good") |> LazyHTML.text() =~ "upgraded"
+      assert LazyHTML.query(doc, ".lp-timeline time") |> LazyHTML.text() =~ "20:01"
       {k, _} = :binary.match(timeline, "kubelet.service")
       {l, _} = :binary.match(timeline, "upgraded")
       assert k < l, "newest first"

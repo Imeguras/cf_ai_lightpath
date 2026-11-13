@@ -206,6 +206,20 @@ defmodule Lightpath.FixturesTest do
       assert Fixtures.kind(f(3, argv: ["zpool", "status"])) == :failed
     end
 
+    test "pacman/paru -Qu exiting 1 with no output means nothing to upgrade" do
+      for argv <- [["paru", "-Qua"], ["pacman", "-Qu"], ["paru", "-Qu"]] do
+        assert Fixtures.kind(f(1, argv: argv)) == :ok, inspect(argv)
+      end
+
+      assert Fixtures.kind(f(1, argv: ["paru", "-Qua"], stderr: "error: failed to fetch")) ==
+               :failed
+
+      assert Fixtures.kind(f(1, argv: ["paru", "-Qua"], stdout: "zfs-dkms 2.4.4 -> 2.4.5")) ==
+               :failed
+
+      assert Fixtures.kind(f(1, argv: ["paru", "-Q"])) == :failed
+    end
+
     test "anything else non-zero is a failure, including a missing device" do
       assert Fixtures.kind(
                f(1, stderr: "Could not open device at /dev/ipmi0: No such file or directory")

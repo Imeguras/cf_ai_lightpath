@@ -11,7 +11,7 @@ export TF_VAR_worker_url = $(LIGHTPATH_WORKER_URL)
 
 WORKER_TF = deploy/terraform/worker
 
-.PHONY: dev prod home down test bundle wrangler-config deploy azure
+.PHONY: dev prod home down test bundle wrangler-config deploy azure demo-gif
 
 dev:
 	docker compose --profile dev up --build --remove-orphans
@@ -47,3 +47,11 @@ deploy: bundle
 # .github/workflows/image.yml).
 azure:
 	terraform -chdir=deploy/terraform/azure apply
+
+# README walkthrough: drives headless Chromium against the running app
+# (make prod) and encodes docs/demo.gif with ffmpeg.
+demo-gif:
+	rm -rf docs/demo/frames && mkdir -p docs/demo/frames
+	node docs/demo/record.mjs http://localhost:$(or $(LIGHTPATH_PORT),4100) docs/demo/frames
+	ffmpeg -loglevel error -y -framerate 2.5 -i docs/demo/frames/f%04d.png -vf "scale=960:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=96:stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle" -loop 0 docs/demo.gif
+	rm -rf docs/demo/frames

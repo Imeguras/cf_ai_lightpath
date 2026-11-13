@@ -187,7 +187,9 @@ defmodule Lightpath.Fixtures do
   @doc """
   Refines `status/1` for display, saying why a command did not succeed:
 
-    * `:ok` and `:not_run` - as `status/1`
+    * `:ok` and `:not_run` - as `status/1`; also `pacman`/`paru -Qu...`
+      exiting 1 with no output at all, which is how they say "nothing to
+      upgrade"
     * `:needs_privilege` - it failed and its stderr or error says it lacked
       permission ("Operation not permitted", "Permission denied", "must be
       root", ...): the probe runs unprivileged, so this is expected and the
@@ -206,6 +208,9 @@ defmodule Lightpath.Fixtures do
     case status(f) do
       :failed ->
         cond do
+          nothing_to_upgrade?(f) ->
+            :ok
+
           text =~ ~r/operation not permitted|permission denied|must be root|are you root/i ->
             :needs_privilege
 
@@ -220,4 +225,15 @@ defmodule Lightpath.Fixtures do
         other
     end
   end
+
+  defp nothing_to_upgrade?(%Fixture{
+         argv: [prog, "-Qu" <> _ | _],
+         exit_code: 1,
+         stdout: "",
+         stderr: ""
+       })
+       when prog in ["pacman", "paru"],
+       do: true
+
+  defp nothing_to_upgrade?(_), do: false
 end

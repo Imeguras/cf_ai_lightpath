@@ -107,8 +107,10 @@ services:
       LIGHTPATH_WORKER_URL: ${LIGHTPATH_WORKER_URL:?set LIGHTPATH_WORKER_URL in .env}
       LIGHTPATH_PROBE_SOCKET: /run/lightpath/probe.sock
     group_add:
-      # getent group hlprobe | cut -d: -f3
-      - ${LIGHTPATH_PROBE_GID:?set LIGHTPATH_PROBE_GID in .env (getent group hlprobe)}
+      # The numeric id from `getent group hlprobe` (LIGHTPATH_PROBE_GID in
+      # .env). Not a required variable: that would break every profile on
+      # machines without the daemon; unset, starting this one fails instead.
+      - ${LIGHTPATH_PROBE_GID:-hlprobe}
     volumes:
       - /var/lib/lightpath/public:/fixtures:ro
       - /run/lightpath:/run/lightpath:ro

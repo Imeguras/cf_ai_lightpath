@@ -50,7 +50,7 @@ func main() {
 	d, err := daemon.New(daemon.Config{
 		StateDir: *state, Scrubber: s, Commands: inventory.DefaultCommands(), Rules: correlate.DefaultRules(),
 		Runner: inventory.LocalRunner{}, Timeout: *timeout, Target: "hlprobe@" + host, Keep: *keep,
-		Quiet: 30 * time.Second, MaxWait: 5 * time.Minute, Now: time.Now,
+		Quiet: 30 * time.Second, MaxWait: 5 * time.Minute, Suppress: time.Hour, Now: time.Now,
 	})
 	if err != nil {
 		log.Fatal(err)

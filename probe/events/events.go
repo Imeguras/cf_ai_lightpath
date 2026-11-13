@@ -35,6 +35,9 @@ type Event struct {
 	// "upgraded" or "removed".
 	Change  string `json:"change"`
 	Message string `json:"message"`
+	// Repeats: how many identical events (same Kind, Subject and Change)
+	// were left out since the previous one was recorded (see daemon).
+	Repeats int `json:"repeats,omitempty"`
 }
 
 // Entry is one parsed journal entry: always its cursor and time, plus the
@@ -74,7 +77,9 @@ var ErrMalformed = errors.New("not a journal entry")
 // __REALTIME_TIMESTAMP (microseconds since the epoch, UTC).
 //
 // The entry carries an event when:
-//   - SYSLOG_IDENTIFIER is "systemd", UNIT is set and MESSAGE_ID is in
+//   - SYSLOG_IDENTIFIER is "systemd", UNIT is set and is a .service,
+//     .socket, .timer, .path or .target unit (transient .mount, .scope,
+//     .slice and .device units are noise), and MESSAGE_ID is in
 //     UnitMessages: a Unit event for UNIT;
 //   - _TRANSPORT is "kernel" and MESSAGE contains "<iface> NIC Link is Up"
 //     or "... Down" (any priority): a Kernel "link-up"/"link-down" event for
@@ -106,7 +111,7 @@ func Parse(line []byte) (Entry, error) {
 
 	ident := field("SYSLOG_IDENTIFIER")
 	switch {
-	case ident == "systemd" && field("UNIT") != "":
+	case ident == "systemd" && unitRE.MatchString(field("UNIT")):
 		if change, ok := UnitMessages[field("MESSAGE_ID")]; ok {
 			return event(Unit, field("UNIT"), change)
 		}
@@ -125,6 +130,8 @@ func Parse(line []byte) (Entry, error) {
 	}
 	return entry, nil
 }
+
+var unitRE = regexp.MustCompile(`\.(service|socket|timer|path|target)$`)
 
 var linkRE = regexp.MustCompile(`(\S+?):? NIC Link is (Up|Down)`)
 
